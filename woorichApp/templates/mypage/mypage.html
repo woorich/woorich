@@ -1,9 +1,8 @@
 <!-- mypage.html -->
 {% extends "layouts/base.html" %}
-
-{% block title %}Title - Mypage{% endblock %}
-
 {% block content %}
-<h2>나의 정보</h2>
-<a href="#"><button>정보 수정</button></a>
+  <h1>안녕하세요, {{ user.username }}!</h1>
+  <p>고객님의 ID 는: {{ user.id }}입니다.</p>
+  <a href="{{ url_for('auth.delete_account') }}" class="btn btn-danger">회원탈퇴</a>
+​
 {% endblock %}

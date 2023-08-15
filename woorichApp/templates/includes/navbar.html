@@ -11,25 +11,28 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        {% if g.user %}
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                </li>
+                    <a class="nav-link" href="{{ url_for('question._list') }}">게시판</a>
+                </li>
+            </ul>
+            {% if g.user %}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">                
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('mypage.mypage') }}">마이페이지</a>
+                </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
                 </li>
+                <li class="nav-item">
             </ul>
             {% else %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.signup') }}">계정생성</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mypage.mypage') }}">마이페이지</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('question._list') }}">게시판</a>
+                    <a class="nav-link" href="{{ url_for('auth.signup') }}">계정생성</a>
                 </li>
             </ul>
             {% endif %}

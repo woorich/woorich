@@ -6,6 +6,7 @@ from werkzeug.utils import redirect
 from woorichApp import db
 from woorichApp.forms import UserCreateForm, UserLoginForm
 from woorichApp.models import User
+import functools
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -55,3 +56,27 @@ def load_logged_in_user():
 def logout():
     session.clear()
     return redirect(url_for('main.index'))
+
+
+# @login_required 라는 함수 만들기
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if g.user is None:
+            _next = request.url if request.method == 'GET' else ''
+            return redirect(url_for('auth.login', next=_next))
+        return view(*args, **kwargs)
+    return wrapped_view
+
+@bp.route('/delete-account', methods=['GET', 'POST'])
+@login_required
+def delete_account():
+    if request.method == 'POST':
+        # g.user.delete()
+        print(g.user)
+        db.session.delete(g.user)
+        db.session.commit()
+        logout()
+        flash('계정이 성공적으로 삭제되었습니다.')
+        return redirect(url_for('main.index'))
+    return render_template('auth/delete_account.html')
