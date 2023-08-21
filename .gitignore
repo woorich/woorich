@@ -1,11 +1,7 @@
 # Byte-compiled / optimized / DLL files 
 *.pyc
 __pycache__/
-migrations/
+# migrations/
 
 # Distribution / packaging
-env/
-woorichvenv
-
-# DB
-woorichDB.mwb
+# env/

@@ -13,17 +13,11 @@ COPY requirements.txt /app/requirements.txt
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
 # Define environment variables for RDS connection
-ENV RDS_HOST woorichdb.co53lyqqsjas.ap-northeast-2.rds.amazonaws.com
-ENV RDS_PORT 3306
-ENV RDS_DB_NAME woorichDB
-ENV RDS_USERNAME woorich
-ENV RDS_PASSWORD 12345678
 ENV FLASK_APP woorichApp
 
 # Run the Flask application
-CMD ["flask", "run"]
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
