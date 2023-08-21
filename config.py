@@ -7,7 +7,7 @@ dotenv.load_dotenv(dotenv_file)  # .env 파일 로드
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')  # .env 파일에서 SECRET_KEY 가져오기
-    WTF_CSRF_SECRET_KEY = SECRET_KEY  # Set the CSRF secret key
+    WTF_CSRF_SECRET_KEY = SECRET_KEY  
     # Debug print statements
     print("SECRET_KEY:", SECRET_KEY)
     print("WTF_CSRF_SECRET_KEY:", WTF_CSRF_SECRET_KEY)
