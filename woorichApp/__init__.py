@@ -2,6 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
+from flask_wtf.csrf import CSRFProtect
 
 import config
 
@@ -14,11 +15,12 @@ naming_convention = {
 }
 db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
+csrf = CSRFProtect()
 
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(config)
+    app.config.from_object(config.app_config)
 
     # ORM
     db.init_app(app)
@@ -28,6 +30,8 @@ def create_app():
         migrate.init_app(app, db)
     from . import models
 
+    csrf.init_app(app)
+    
     # 블루프린트
     from .views import main_views, question_views, answer_views, auth_views, mypage_views
     app.register_blueprint(main_views.bp)

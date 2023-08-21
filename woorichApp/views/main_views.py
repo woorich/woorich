@@ -14,6 +14,3 @@ def Woorich():
 @bp.route('/')
 def index():
     return render_template('index.html')
-
-
-
