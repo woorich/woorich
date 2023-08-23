@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="bg-light container-fluid text-white">
+    <div class="row">
+        <div class="left-section col-3 p-3 text-primary">
+            <h3>지역 선택</h3>
+            <p>
+                지역 선택
+            </p>
+            <h3>업종 대분류 선택</h3>
+            <div >
+                <button type="button" class="btn btn-outline-primary">전체</button>
+                <button type="button" class="btn btn-outline-primary">요식업</button>
+                <button type="button" class="btn btn-outline-primary">서비스업</button>
+                <button type="button" class="btn btn-outline-primary">소매업</button>
+            </div>
+        </div>
+        <div class="right-section col-9 bg-warning">
+            지도 그려질 부분
+        </div>
+    </div>
+</div>
+{% endblock %}

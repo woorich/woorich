@@ -33,12 +33,13 @@ def create_app():
     csrf.init_app(app)
     
     # 블루프린트
-    from .views import main_views, question_views, answer_views, auth_views, mypage_views
+    from .views import main_views, question_views, answer_views, auth_views, mypage_views, dashboard_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(question_views.bp)
     app.register_blueprint(answer_views.bp)
     app.register_blueprint(auth_views.bp)
     app.register_blueprint(mypage_views.bp)
+    app.register_blueprint(dashboard_views.bp)
 
     # 필터
     from .filter import format_datetime
