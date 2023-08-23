@@ -1,22 +1,41 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-<div class="bg-light container-fluid text-white">
+<div class="container-fluid">
     <div class="row">
-        <div class="left-section col-3 p-3 text-primary">
-            <h3>지역 선택</h3>
-            <p>
-                지역 선택
-            </p>
-            <h3>업종 대분류 선택</h3>
-            <div >
-                <button type="button" class="btn btn-outline-primary">전체</button>
-                <button type="button" class="btn btn-outline-primary">요식업</button>
-                <button type="button" class="btn btn-outline-primary">서비스업</button>
-                <button type="button" class="btn btn-outline-primary">소매업</button>
+        <div class="left-section col-3 py-4 mb-3 text-secondary shadow">
+            <div class="mb-5">
+                <h3>지역 선택</h3>
+                <div class="input-group w-100 my-3">
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>행정구</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected>행정동</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                    
+                </div>
+            </div>
+            <div class="my-3 w-100">
+                <h3>업종 대분류 선택</h3>
+                <div class="my-3 d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary px-4">전체</button>
+                    <button type="button" class="btn btn-outline-secondary">요식업</button>
+                    <button type="button" class="btn btn-outline-secondary">서비스업</button>
+                    <button type="button" class="btn btn-outline-secondary">소매업</button>
+                </div>
+            </div>
+            <div class="w-100 text-center mt-5">
+                <button type="button" class="btn btn-outline-primary"> Submit </button>
             </div>
         </div>
-        <div class="right-section col-9 bg-warning">
-            지도 그려질 부분
+        <div class="right-section col-9 bg-light text-center">
+            <h3 class="align-middle">지도 그려질 영역</h3>
         </div>
     </div>
 </div>
