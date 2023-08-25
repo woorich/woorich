@@ -13,19 +13,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li>
-                    <a class="nav-link " href="{{ url_for('dashboard.index') }}">대시보드</a>
+                    <a class="nav-link nav-btn" href="{{ url_for('dashboard.index') }}">대시보드</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{ url_for('question._list') }}">게시판</a>
+                    <a class="nav-link nav-btn" href="{{ url_for('question._list') }}">게시판</a>
                 </li>
             </ul>
             {% if g.user %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">                
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mypage.mypage') }}">마이페이지</a>
+                    <a class="nav-link" href="{{ url_for('mypage.mypage') }}"><i class="bi bi-person-lines-fill mx-2"></i>마이페이지</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}"><i class="bi bi-file-earmark-person-fill mx-1"></i>{{ g.user.username }} (로그아웃)</a>
                 </li>
                 <li class="nav-item">
             </ul>
