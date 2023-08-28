@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-<h3 class="text-center">게시판</h3>
-<div class="container my-5">
+<h3 class="text-secondary px-5">게시판</h3>
+<div class="container my-2">
     <div class="text-end pb-3">
         <a href="{{ url_for('question.create') }}" class="btn btn-info text-white">질문 등록하기</a>
     </div>
@@ -57,7 +57,7 @@
         </li>
         {% else %}
         <li class="page-item active" aria-current="page">
-            <a class="page-link" href="javascript:void(0)">{{ page_num }}</a>
+            <a class="page-link bg-info border-info" href="javascript:void(0)">{{ page_num }}</a>
         </li>
         {% endif %}
         {% else %}
