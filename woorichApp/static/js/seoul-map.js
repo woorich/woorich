@@ -1,4 +1,4 @@
-mapboxgl.accessToken = 'pk.eyJ1Ijoid29veW9vbndpbm5pZSIsImEiOiJjbGx1anJkdWsxY29kM2Zuem1naWpqdWc2In0.SAvOfExJLVtezNxgW8GAig';
+mapboxgl.accessToken = 'pk.eyJ1Ijoid29veW9vbndpbm5pZSIsImEiOiJjbGx1anJkdWsxY29kM2Zuem1naWpqdWc2In0.SAvOfExJLVtezNxgW8GAig'
 const map = new mapboxgl.Map({
     container: 'map-container', // container ID
     center: [126.9779692, 37.566535], // starting position [lng, lat]
@@ -30,7 +30,7 @@ map.on('load', function() {
         'source': 'tileset_data',
         'source-layer': 'seoul_gu-3hhcst',
         'paint' : {
-            'background-color': 'hsla(0, 0%, 100%, 0.85)'
+            'background-color': 'hsla(0, 0%, 100%, 1)'
         }
     });
     map.addLayer({
@@ -39,10 +39,22 @@ map.on('load', function() {
         'source': 'tileset_data',
         'source-layer': 'seoul_gu-3hhcst',
         'paint': {
-            'fill-color': 'hsla(207, 58%, 69%, 0.52)',
+            'fill-color': 'hsla(248, 53%, 58%, 0.5)',
             'fill-opacity': 0.75,
             'fill-outline-color': 'hsl(0, 100%, 100%)'
         }
     });
 
 });
+
+function show_report() {
+    var selectedGu = document.querySelector('.seoul-gu-selected option:checked').textContent;
+
+    var selectedDong = document.querySelector('.seoul-dong-selected option:checked').textContent;
+
+    // Display the selected texts or perform any other action
+    console.log("Selected 행정구: " + selectedGu + "\nSelected 행정동: " + selectedDong);
+
+    var resultDiv = document.getElementById('result'); // Replace 'result' with the actual ID of your <div>
+    resultDiv.innerHTML = "<br> 선택된 행정구: " + "<h3>" + selectedGu + "</h3>" + "<br> 선택된 행정동: " + "<h3>" + selectedDong+"</h3><br>";
+}

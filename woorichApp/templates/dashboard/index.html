@@ -6,17 +6,17 @@
             <div class="mb-5">
                 <h3>지역 선택</h3>
                 <div class="input-group w-100 my-3">
-                    <select class="form-select" aria-label="Default select example">
+                    <select class="form-select seoul-gu-selected" aria-label="Default select example">
                         <option selected>행정구</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option value="1">종로구</option>
+                        <option value="2">강남구</option>
+                        <option value="3">마포구</option>
                       </select>
-                      <select class="form-select" aria-label="Default select example">
+                      <select class="form-select seoul-dong-selected" aria-label="Default select example">
                         <option selected>행정동</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option value="1">상암동</option>
+                        <option value="2">연남동</option>
+                        <option value="3">신사동</option>
                       </select>
                     
                 </div>
@@ -31,13 +31,19 @@
                 </div>
             </div>
             <div class="w-100 text-center mt-5">
-                <button type="button" class="btn btn-outline-info"> 제출 </button>
+                <button type="button" class="btn btn-outline-info" onclick="show_report()"> 제출 </button>
             </div>
+            <div id="result" class="text-center mt-3" style="background-color:rgb(183, 196, 255);color:white;"></div>
         </div>
         <div id="map-container" style="height:75vh" class="right-section col-9 bg-light text-center">
         </div>
     </div>
     
+    {% if g.user %}
+
+        <button type="button" class="btn btn-outline-primary">보고서</button>    
+    {% else %}    
+    {% endif %}
 </div>
 
 <script defer src="{{ url_for('static', filename='/js/seoul-map.js') }}"></script>
