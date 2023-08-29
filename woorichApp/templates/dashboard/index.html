@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
 <div class="container-fluid">
-    <div class="row" height="150%">
+    <div class="row">
         <div class="left-section col-3 p-4 mb-3 text-secondary shadow">
             <div class="mb-5">
                 <h3>지역 선택</h3>
@@ -34,9 +34,10 @@
                 <button type="button" class="btn btn-outline-info"> 제출 </button>
             </div>
         </div>
-        <div id="map-container" class="right-section col-9 bg-light text-center">
+        <div id="map-container" style="height:80vh" class="right-section col-9 bg-light text-center">
         </div>
     </div>
+    
 </div>
 
 <script defer src="{{ url_for('static', filename='/js/seoul-map.js') }}"></script>
