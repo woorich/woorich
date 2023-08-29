@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" height="150%">
         <div class="left-section col-3 p-4 mb-3 text-secondary shadow">
             <div class="mb-5">
                 <h3>지역 선택</h3>
@@ -34,9 +34,10 @@
                 <button type="button" class="btn btn-outline-info"> 제출 </button>
             </div>
         </div>
-        <div class="right-section col-9 bg-light text-center">
-            <iframe width='100%' height='100%' src="https://api.mapbox.com/styles/v1/wooyoonwinnie/cllues9di005301rdh9noaqci.html?title=false&access_token=pk.eyJ1Ijoid29veW9vbndpbm5pZSIsImEiOiJjbGx1ZWl2ZjkxOWt0M2RtbGY3MWl5N29jIn0.Ksbm1ZDp2VptXVlOldqguw&zoomwheel=true#10.38/37.5482/126.9439" title="Monochrome" style="border:none;"></iframe>
+        <div id="map-container" class="right-section col-9 bg-light text-center">
         </div>
     </div>
 </div>
+
+<script defer src="{{ url_for('static', filename='/js/seoul-map.js') }}"></script>
 {% endblock %}
