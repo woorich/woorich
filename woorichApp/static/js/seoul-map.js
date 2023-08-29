@@ -2,7 +2,7 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoid29veW9vbndpbm5pZSIsImEiOiJjbGx1anJkdWsxY29kM
 const map = new mapboxgl.Map({
     container: 'map-container', // container ID
     center: [126.9779692, 37.566535], // starting position [lng, lat]
-    zoom: 10, // starting zoom
+    zoom: 10.2, // starting zoom
     style: 'mapbox://styles/mapbox/light-v10', // style URL or style object
     
     hash: true, // sync `center`, `zoom`, `pitch`, and `bearing` with URL
@@ -30,7 +30,7 @@ map.on('load', function() {
         'source': 'tileset_data',
         'source-layer': 'seoul_gu-3hhcst',
         'paint' : {
-            'background-color': 'hsla(0, 0%, 100%, 0.7)'
+            'background-color': 'hsla(0, 0%, 100%, 0.85)'
         }
     });
     map.addLayer({
@@ -39,7 +39,7 @@ map.on('load', function() {
         'source': 'tileset_data',
         'source-layer': 'seoul_gu-3hhcst',
         'paint': {
-            'fill-color': 'hsla(208, 66%, 46%, 0.45)',
+            'fill-color': 'hsla(207, 58%, 69%, 0.52)',
             'fill-opacity': 0.75,
             'fill-outline-color': 'hsl(0, 100%, 100%)'
         }
