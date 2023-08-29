@@ -1,0 +1,133 @@
+{% extends 'layouts/base.html' %} {% block content %}
+<div class="container my-3">
+  <!-- flash 오류 -->
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-danger" role="alert">{{ message }}</div>
+  {% endfor %}
+  <!-- 질문 -->
+  <h2 class="border-bottom py-2">{{ board.b_title }}</h2>
+  <div class="card my-3">
+    <div class="card-body">
+      <div class="card-text" style="white-space: pre-line">
+        {{ board.b_content }}
+      </div>
+      <div class="d-flex justify-content-end">
+        {% if board.modify_date %}
+        <div class="badge bg-light text-dark p-2 text-start mx-3">
+          <div class="mb-2">수정일시</div>
+          <div>{{ board.modify_date|datetime }}</div>
+        </div>
+        {% endif %}
+        <div class="badge bg-light text-dark p-2 text-start">
+          <div class="mb-2">{{ board.user.username }}</div>
+          <div>{{ board.created_at|datetime }}</div>
+        </div>
+      </div>
+      <div class="my-3">
+        {% if g.user == board.user %}
+        <a
+          href="{{ url_for('board.modify', board_no=board.no) }}"
+          class="btn btn-sm btn-outline-secondary"
+          >수정</a
+        >
+        <a
+          href="javascript:void(0)"
+          class="delete btn btn-sm btn-outline-secondary"
+          data-uri="{{ url_for('board.delete', board_no=board.no) }}"
+          >삭제</a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <!-- 답변 목록 -->
+  <h5 class="border-bottom my-3 py-2">
+    {{ board.reply|length }}개의 답변이 있습니다.
+  </h5>
+  {% for reply in board.reply %}
+  <div class="card my-3">
+    <div class="card-body">
+      <div class="card-text" style="white-space: pre-line">
+        {{ reply.r_content }}
+      </div>
+      <div class="d-flex justify-content-end">
+        {% if reply.modify_date %}
+        <div class="badge bg-light text-dark p-2 text-start mx-3">
+          <div class="mb-2">수정일시</div>
+          <div>{{ reply.modify_date|datetime }}</div>
+        </div>
+        {% endif %}
+        <div class="badge bg-light text-dark p-2 text-start">
+          <div class="mb-2">{{ reply.admin.admin_id }}</div>
+          <div>{{ reply.created_at|datetime }}</div>
+        </div>
+      </div>
+      <div class="my-3">
+        {% if g.user == reply.admin %}
+        <a
+          href="{{ url_for('reply.modify', reply_id=reply.no) }}"
+          class="btn btn-sm btn-outline-secondary"
+          >수정</a
+        >
+        <a
+          href="javascript:void(0)"
+          class="delete btn btn-sm btn-outline-secondary"
+          data-uri="{{ url_for('reply.delete', reply_id=reply.no) }}"
+          >삭제</a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <!-- 답변 등록 -->
+  <form
+    action="{{ url_for('reply.create', board_no=board.no) }}"
+    method="post"
+    class="my-3"
+  >
+    {{ form.csrf_token }}
+    <!-- 오류표시 Start -->
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+      {% for field, errors in form.errors.items() %}
+      <strong>{{ form[field].label }}</strong>
+      <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <!-- 오류표시 End -->
+    <div class="mb-3">
+      <textarea
+        {%
+        if
+        not
+        g.user
+        %}disabled{%
+        endif
+        %}
+        name="content"
+        id="content"
+        class="form-control"
+        rows="10"
+      ></textarea>
+    </div>
+    <input type="submit" value="답변등록" class="btn btn-primary" />
+  </form>
+</div>
+{% endblock %} {% block script %}
+<script type="text/javascript">
+  const delete_elements = document.getElementsByClassName("delete");
+  Array.from(delete_elements).forEach(function (element) {
+    element.addEventListener("click", function () {
+      if (confirm("정말로 삭제하시겠습니까?")) {
+        location.href = this.dataset.uri;
+      }
+    });
+  });
+</script>
+{% endblock %}

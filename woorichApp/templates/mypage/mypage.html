@@ -1,8 +1,15 @@
 <!-- mypage.html -->
-{% extends "layouts/base.html" %}
-{% block content %}
-  <h1>안녕하세요, {{ user.username }}!</h1>
-  <p>고객님의 ID 는: {{ user.id }}입니다.</p>
-  <a href="{{ url_for('auth.delete_account') }}" class="btn btn-danger">회원탈퇴</a>
-​
+{% extends "layouts/base.html" %} {% block content %}
+<h1>안녕하세요, {{ user.username }}님!</h1>
+<p>고객님의 ID는: {{ user_no }}입니다.</p>
+<a href="{{ url_for('auth.delete_account') }}" class="btn btn-danger"
+  >회원탈퇴</a
+>
+<h2>게시글 목록</h2>
+<ul>
+  {% for board in user.board_set %}
+  <!-- 변경된 데이터 모델에 맞게 board_set 사용 -->
+  <li>{{ board.b_title }}</li>
+  {% endfor %}
+</ul>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %} {% block content %}
+<div class="container">
+  <h5 class="my-3 border-bottom pb-2">답변 수정</h5>
+  <form method="post">
+    {{ form.csrf_token }} {% include "form_errors.html" %}
+    <div class="mb-3">
+      <label for="r_content">답변내용</label>
+      <!-- 변경된 필드명에 맞게 수정 -->
+      <textarea
+        class="form-control"
+        name="r_content"
+        id="r_content"
+        <!--
+        변경된
+        필드명에
+        맞게
+        수정
+        --
+      >
+                      rows="10">{{ form.r_content.data or '' }}</textarea
+      >
+      <!-- 변경된 필드명에 맞게 수정 -->
+    </div>
+    <button type="submit" class="btn btn-primary">저장하기</button>
+  </form>
+</div>
+{% endblock %}
