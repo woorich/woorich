@@ -1,0 +1,15 @@
+body {
+  font-family: "Black Han Sans", sans-serif;
+  font-family: "Nanum Gothic", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 600;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
