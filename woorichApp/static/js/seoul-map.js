@@ -30,7 +30,7 @@ map.on('load', function() {
         'source': 'tileset_data',
         'source-layer': 'seoul_gu-3hhcst',
         'paint' : {
-            'background-color': 'hsla(0, 0%, 100%, 1)'
+            'background-color': 'hsla(0, 0%, 100%, 0.8)'
         }
     });
     map.addLayer({
