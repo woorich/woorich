@@ -6,17 +6,11 @@
             <div class="mb-5">
                 <h3>지역 선택</h3>
                 <div class="input-group w-100 my-3">
-                    <select class="form-select" aria-label="Default select example">
+                    <select class="form-select" id="dynamic-select-gu" aria-label="Default select example">
                         <option selected>행정구</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
                       </select>
-                      <select class="form-select" aria-label="Default select example">
+                      <select class="form-select" id="dynamic-select-dong" aria-label="Default select example">
                         <option selected>행정동</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
                       </select>
                     
                 </div>
@@ -31,12 +25,20 @@
                 </div>
             </div>
             <div class="w-100 text-center mt-5">
-                <button type="button" class="btn btn-outline-info"> 제출 </button>
+                <button type="button" class="btn btn-outline-info" onclick="show_report()"> 제출 </button>
             </div>
+            <div id="result" class="text-center mt-3" style="background-color:rgb(183, 196, 255);color:white;"></div>
         </div>
-        <div class="right-section col-9 bg-light text-center">
-            <iframe width='100%' height='100%' src="https://api.mapbox.com/styles/v1/wooyoonwinnie/cllues9di005301rdh9noaqci.html?title=false&access_token=pk.eyJ1Ijoid29veW9vbndpbm5pZSIsImEiOiJjbGx1ZWl2ZjkxOWt0M2RtbGY3MWl5N29jIn0.Ksbm1ZDp2VptXVlOldqguw&zoomwheel=true#10.38/37.5482/126.9439" title="Monochrome" style="border:none;"></iframe>
+        <div id="map-container" style="height:75vh" class="right-section col-9 bg-light text-center">
         </div>
     </div>
+    
+    {% if g.user %}
+
+        <button type="button" class="btn btn-outline-primary">보고서</button>    
+    {% else %}    
+    {% endif %}
 </div>
+
+<script defer src="{{ url_for('static', filename='/js/seoul-map.js') }}" staticUrl = "{{ url_for('static', filename='') }}"></script>
 {% endblock %}
