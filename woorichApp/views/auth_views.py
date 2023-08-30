@@ -5,8 +5,9 @@ from werkzeug.utils import redirect
 
 from woorichApp import db
 from woorichApp.forms import UserCreateForm, UserLoginForm
-from woorichApp.models import User  # 모델명 변경
+from woorichApp.models import User
 import functools
+import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -14,14 +15,15 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def signup():
     form = UserCreateForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = User.query.filter_by(user_id=form.user_id.data).first()  # 모델명 변경
+        user = User.query.filter_by(user_id=form.user_id.data).first()
         if not user:
-            user = User(user_id=form.user_id.data,  # 모델명 변경
-                        user_pw=generate_password_hash(form.user_pw1.data),  # 모델명 변경
+            user = User(user_id=form.user_id.data,
+                        user_pw=generate_password_hash(form.user_pw1.data),
                         email=form.email.data,
-                        username=form.username.data,  # 모델명 변경
-                        phone=form.phone.data,  # 모델명 변경
-                        address=form.address.data)  # 모델명 변경
+                        username=form.username.data,
+                        phone=form.phone.data,
+                        address=form.address.data,
+                        created_at=datetime.datetime.utcnow())
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('main.index'))
@@ -34,14 +36,14 @@ def login():
     form = UserLoginForm()
     if request.method == 'POST' and form.validate_on_submit():
         error = None
-        user = User.query.filter_by(user_id=form.user_id.data).first()  # 모델명 변경
+        user = User.query.filter_by(user_id=form.user_id.data).first()
         if not user:
             error = "존재하지 않는 사용자입니다."
-        elif not check_password_hash(user.user_pw, form.user_pw.data):  # 모델명 변경
+        elif not check_password_hash(user.user_pw, form.user_pw.data):
             error = "비밀번호가 올바르지 않습니다."
         if error is None:
             session.clear()
-            session['user_id'] = user.no  # 모델명 변경
+            session['user_id'] = user.no
             _next = request.args.get('next', '')
             if _next:
                 return redirect(_next)

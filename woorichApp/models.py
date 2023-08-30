@@ -1,13 +1,28 @@
 from woorichApp import db
 
+class User(db.Model):
+    __tablename__ = 'user'
+    no = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(45), unique=True, nullable=False)
+    user_pw = db.Column(db.String(300), nullable=False)
+    username = db.Column(db.String(45), nullable=False)
+    email = db.Column(db.String(45), unique=True, nullable=False)
+    phone = db.Column(db.String(45), unique=True, nullable=False)
+    address = db.Column(db.String(100), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False)
+    
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 class Board(db.Model):
     __tablename__ = 'board'
     no = db.Column(db.Integer, primary_key=True)
-    b_title = db.Column(db.String(45), nullable=False)
-    b_content = db.Column(db.String(500), nullable=False)
+    b_title = db.Column(db.String(100), nullable=False)
+    b_content = db.Column(db.String(5000), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False)
     user_no = db.Column(db.Integer, db.ForeignKey('user.no', ondelete='CASCADE'), nullable=False)
-    user = db.relationship('user', backref=db.backref('board_set'))
+    user = db.relationship(User, backref=db.backref('board_set'))
 
 class Reply(db.Model):
     __tablename__ = 'reply'
@@ -16,7 +31,7 @@ class Reply(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False)
     admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
     board_no = db.Column(db.Integer, db.ForeignKey('board.no', ondelete='CASCADE'))
-    board = db.relationship('board', backref=db.backref('reply'))
+    board = db.relationship(Board, backref=db.backref('reply'))
     admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
 
 class Admin(db.Model):
@@ -25,22 +40,7 @@ class Admin(db.Model):
     admin_id = db.Column(db.String(45), unique=True, nullable=False)
     admin_pw = db.Column(db.String(45), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False)
-    reply = db.relationship('reply', backref=db.backref('admin_set'))
-
-class User(db.Model):
-    __tablename__ = 'user'
-    no = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(45), unique=True, nullable=False)
-    user_pw = db.Column(db.String(45), nullable=False)
-    username = db.Column(db.String(45), nullable=False)
-    email = db.Column(db.String(45), unique=True, nullable=False)
-    phone = db.Column(db.String(45), unique=True, nullable=False)
-    address = db.Column(db.String(45), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False)
-    
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+    reply = db.relationship(Reply, backref=db.backref('admin_set'))
 
 class History(db.Model):
     __tablename__ = 'history'
@@ -50,7 +50,7 @@ class History(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False)
     link = db.Column(db.String(200), nullable=False)
     user_no = db.Column(db.Integer, db.ForeignKey('user.no', ondelete='CASCADE'), nullable=False)
-    user = db.relationship('user', backref=db.backref('history_set'))
+    user = db.relationship(User, backref=db.backref('history_set'))
 
 # class Userinfo(db.Model):
 #     no = db.Column(db.Integer, primary_key=True)
