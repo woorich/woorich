@@ -5,7 +5,6 @@ from sqlalchemy import MetaData
 from flask_wtf.csrf import CSRFProtect
 
 import config
-from .views import board_views, reply_views
 
 naming_convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -35,7 +34,7 @@ def create_app():
     csrf.init_app(app)
     
     # 블루프린트
-    from .views import main_views, auth_views, mypage_views, dashboard_views
+    from .views import board_views, reply_views, main_views, auth_views, mypage_views, dashboard_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(board_views.bp)
     app.register_blueprint(reply_views.bp)
