@@ -49,14 +49,30 @@ map.on('load', function() {
 
 function show_report() {
     var selectedGu = document.getElementById('dynamic-select-gu').value;
-
     var selectedDong = document.getElementById('dynamic-select-dong').value;
 
-    // Display the selected texts or perform any other action
     console.log("Selected 행정구: " + selectedGu + "\nSelected 행정동: " + selectedDong);
 
-    var resultDiv = document.getElementById('result'); // Replace 'result' with the actual ID of your <div>
+    var resultDiv = document.getElementById('result');
     resultDiv.innerHTML = "<br> 선택된 행정구: " + "<h3>" + selectedGu + "</h3>" + "<br> 선택된 행정동: " + "<h3>" + selectedDong+"</h3><br>";
+
+    fetch(staticUrl+'gu-dong-coord-data.csv')
+    .then(response => response.text())
+    .then(csvData => {
+        const rows = csvData.split('\n');
+        for(let i=0; i < rows.length;i++){
+            let item = rows[i].split(',');
+            let dong_code = item[1];
+            let gu = item[2];
+            let dong = item[3];
+            let latitude = item[4];
+            let longitude = item[5];
+            if ((selectedGu == gu) && (selectedDong == dong)) {
+                console.log(dong_code, gu, dong, latitude, longitude);
+            }
+        }
+    })
+    .catch(error => console.error('Error loading CSV:', error));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,35 +80,30 @@ function show_report() {
 const selectElementGu = document.getElementById('dynamic-select-gu');
 const selectElementDong = document.getElementById('dynamic-select-dong');
 
-const staticUrl = document.currentScript.getAttribute('staticUrl');
-// Replace 'administrative_dongs.csv' with the path to your CSV file
-fetch(staticUrl + 'gu-dong-data.csv', {
+//const staticUrl = document.currentScript.getAttribute('staticUrl');
+fetch(staticUrl + 'gu-dong-coord-data.csv', {
     headers: {
-        'Content-Type': 'text/csv; charset=cp-949' // Specify the character encoding
+        'Content-Type': 'text/csv; charset=cp-949' // character encoding
     }
 })
-.then(response => response.text()) // Read the CSV file as text
+.then(response => response.text())
 .then(csvData => {
-    // Parse the CSV data into an array of objects
     const csvArray = csvData.split('\n').map(row => row.split(','));
 
-    // Remove the header row if present (optional)
     const header = csvArray[0];
     if (header.length > 1) {
         csvArray.shift();
     }
 
-    const guSet = new Set(); // Use a Set to store unique 행정구 values
+    const guSet = new Set();
 
-    // Loop through the data to populate 행정구 dropdown and collect unique values
     csvArray.forEach(row => {
-        const guValue = row[2]; // Assuming 행정구 is in column 3 (index 2)
+        const guValue = row[2];
         if (guValue) {
-            guSet.add(guValue); // Add 행정구 value to the Set if it's not undefined
+            guSet.add(guValue);
         }
     });
 
-    // Populate the 행정구 dropdown with unique values
     guSet.forEach(guValue => {
         const option = document.createElement('option');
         option.value = guValue;
@@ -100,17 +111,14 @@ fetch(staticUrl + 'gu-dong-data.csv', {
         selectElementGu.appendChild(option);
     });
 
-    // Add an event listener to 행정구 dropdown to dynamically populate 행정동 dropdown
     selectElementGu.addEventListener('change', () => {
-        // Clear existing options in 행정동 dropdown
         selectElementDong.innerHTML = '';
 
         const selectedGu = selectElementGu.value;
 
-        // Loop through the data to find matching 행정동 values for the selected 행정구
         csvArray.forEach(row => {
-            const guValue = row[2]; // Assuming 행정구 is in column 3 (index 2)
-            const dongValue = row[3]; // Assuming 행정동 is in column 4 (index 3)
+            const guValue = row[2];
+            const dongValue = row[3];
 
             if (guValue === selectedGu) {
                 const option = document.createElement('option');
