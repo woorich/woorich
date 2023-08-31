@@ -21,3 +21,7 @@ class UserCreateForm(FlaskForm):
 class UserLoginForm(FlaskForm):
     user_id = StringField('사용자이름', validators=[DataRequired(), Length(min=5, max=25)])
     user_pw = PasswordField('비밀번호', validators=[DataRequired()])
+
+
+class UserDeleteForm(FlaskForm):
+    pass
