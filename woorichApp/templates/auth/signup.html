@@ -1,31 +1,79 @@
-{% extends "layouts/base.html" %}
-{% block content %}
+{% extends "layouts/base.html" %} {% block content %}
 <div class="container">
-    <h5 class="my-3 border-bottom pb-2">계정생성</h5>
-    <form method="post">
-        {{ form.csrf_token }}
-        {% include "form_errors.html" %}
-        <div class="mb-3">
-            <label for="username">사용자 이름</label>
-            <input type="text" class="form-control" name="username" id="username"
-                   value="{{ form.username.data or '' }}">
-        </div>
-        <div class="mb-3">
-            <label for="password1">비밀번호</label>
-            <input type="password" class="form-control" name="password1" id="password1"
-                   value="{{ form.password1.data or '' }}">
-        </div>
-        <div class="mb-3">
-            <label for="password2">비밀번호 확인</label>
-            <input type="password" class="form-control" name="password2" id="password2"
-                   value="{{ form.password2.data or '' }}">
-        </div>
-        <div class="mb-3">
-            <label for="email">이메일</label>
-            <input type="text" class="form-control" name="email" id="email"
-                   value="{{ form.email.data or '' }}">
-        </div>
-        <button type="submit" class="btn btn-primary">생성하기</button>
-    </form>
+  <h5 class="my-3 border-bottom pb-2">계정생성</h5>
+  <form method="post">
+    {{ form.csrf_token }} {% include "form_errors.html" %}
+    <div class="mb-3">
+      <label for="user_id">사용자 ID</label>
+      <input
+        type="text"
+        class="form-control"
+        name="user_id"
+        id="user_id"
+        value="{{ form.user_id.data or '' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="username">실명</label>
+      <input
+        type="text"
+        class="form-control"
+        name="username"
+        id="username"
+        value="{{ form.username.data or '' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="user_pw1">비밀번호</label>
+      <input
+        type="password"
+        class="form-control"
+        name="user_pw1"
+        id="user_pw1"
+        value="{{ form.user_pw1.data or '' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="user_pw2">비밀번호 확인</label>
+      <input
+        type="password"
+        class="form-control"
+        name="user_pw2"
+        id="user_pw2"
+        value="{{ form.user_pw2.data or '' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email">이메일</label>
+      <input
+        type="text"
+        class="form-control"
+        name="email"
+        id="email"
+        value="{{ form.email.data or '' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email">전화번호</label>
+      <input
+        type="text"
+        class="form-control"
+        name="phone"
+        id="phone"
+        value="{{ form.phone.data or '' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email">주소</label>
+      <input
+        type="text"
+        class="form-control"
+        name="address"
+        id="address"
+        value="{{ form.address.data or '' }}"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">생성하기</button>
+  </form>
 </div>
 {% endblock %}

@@ -1,25 +1,33 @@
-{% extends "layouts/base.html" %}
-{% block content %}
+{% extends "layouts/base.html" %} {% block content %}
 <div class="container">
-    <div>
-        <h5 class="my-3 pb-2">로그인</h5>
-    </div>
-    <div>
-        <form method="post">
-            {{ form.csrf_token }}
-            {% include "form_errors.html" %}
-            <div class="mb-3">
-                <label for="username">사용자 이름</label>
-                <input type="text" class="form-control" name="username" id="username"
-                       value="{{ form.username.data or '' }}">
-            </div>
-            <div class="mb-3">
-                <label for="password">비밀번호</label>
-                <input type="password" class="form-control" name="password" id="password"
-                       value="{{ form.password.data or '' }}">
-            </div>
-            <button type="submit" class="btn btn-primary">로그인</button>
-        </form>
-    </div>
+  <div>
+    <h5 class="my-3 pb-2">로그인</h5>
+  </div>
+  <div>
+    <form method="post">
+      {{ form.csrf_token }} {% include "form_errors.html" %}
+      <div class="mb-3">
+        <label for="user_id">사용자 ID</label>
+        <input
+          type="text"
+          class="form-control"
+          name="user_id"
+          id="user_id"
+          value="{{ form.user_id.data or '' }}"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="user_pw">비밀번호</label>
+        <input
+          type="password"
+          class="form-control"
+          name="user_pw"
+          id="user_pw"
+          value="{{ form.user_pw.data or '' }}"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">로그인</button>
+    </form>
+  </div>
 </div>
 {% endblock %}
