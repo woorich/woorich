@@ -17,6 +17,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{os.environ.get('RDS_USERNAME')}:{os.environ.get('RDS_PASSWORD')}@{os.environ.get('RDS_HOST')}:{os.environ.get('RDS_PORT', 3306)}/{os.environ.get('RDS_DB_NAME')}"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    WTF_CSRF_ENABLED = False
     
 class ProductionConfig(Config):
     DEBUG = False
