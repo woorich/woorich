@@ -11,6 +11,7 @@ def mypage():
     user = g.user
     return render_template('mypage/mypage.html', user=user)
 
+# https://github.com/YeonjiKim0316/flask_0711_1/blob/main/app/views/question_views.py 의 modify(question_id) 함수 참조  
 @bp.route('/update_user_info', methods=['POST'])
 @login_required
 def update_user_info():
