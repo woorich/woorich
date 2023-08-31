@@ -12,10 +12,9 @@
                       <select class="form-select" id="dynamic-select-dong" aria-label="Default select example">
                         <option selected>행정동</option>
                       </select>
-                    
                 </div>
             </div>
-            <div class="my-3 w-100">
+            <div class="diva my-3 w-100">
                 <h3>업종 대분류 선택</h3>
                 <div class="my-3 d-flex justify-content-between">
                     <button type="button" class="btn btn-outline-secondary" style="font-size: .8rem;">전체</button>
@@ -34,11 +33,13 @@
     </div>
     
     {% if g.user %}
-
         <button type="button" class="btn btn-outline-primary">보고서</button>    
     {% else %}    
     {% endif %}
 </div>
-
+<script>
+    // Define a global variable for the static URL
+    const staticUrl = "{{ url_for('static', filename='') }}";
+</script>
 <script defer src="{{ url_for('static', filename='/js/seoul-map.js') }}" staticUrl = "{{ url_for('static', filename='') }}"></script>
 {% endblock %}
