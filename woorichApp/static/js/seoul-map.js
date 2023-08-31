@@ -69,7 +69,7 @@ function show_report() {
             let longitude = item[5];
             if ((selectedGu == gu) && (selectedDong == dong)) {
                 console.log(dong_code, gu, dong, latitude, longitude);
-                window.location.href = `/dashboard/report?dong_code=${dong_code}&dong_name=${dong}`;
+                window.location.href = `/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong}`;
                 break;
             }
         }

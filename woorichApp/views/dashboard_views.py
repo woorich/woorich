@@ -9,9 +9,10 @@ def index():
 @bp.route('/report')
 def report():
     dong_code = request.args.get('dong_code')
-    dong_name = request.args.get('dong_name')
+    dong = request.args.get('dong')
+    gu = request.args.get('gu')
     
     # Use dong_code and dong_name to retrieve the necessary data for your report
     # You can also retrieve other parameters as needed
     
-    return render_template('dashboard/analysis-report.html', dong_code=dong_code, dong_name=dong_name)
+    return render_template('dashboard/analysis-report.html', dong_code=dong_code, dong=dong, gu=gu)
