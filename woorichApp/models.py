@@ -32,7 +32,6 @@ class Reply(db.Model):
     admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
     board_no = db.Column(db.Integer, db.ForeignKey('board.no', ondelete='CASCADE'))
     board = db.relationship(Board, backref=db.backref('reply'))
-    admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
 
 class Admin(db.Model):
     __tablename__ = 'admin'

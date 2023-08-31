@@ -2,6 +2,15 @@
 <nav
   class="navbar navbar-expand-lg navbar-light rounded-bottom shadow-sm px-5 py-3"
 >
+  <style>
+    .navbar-brand {
+      font-size: 2rem; /* Woorich 글자 크기 조정. */
+    }
+
+    .navbar-nav-right {
+      margin-left: auto; /* 마이페이지와 로그아웃을 오른쪽으로 정렬. */
+    }
+  </style>
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ url_for('main.index') }}">Woorich</a>
     <button
@@ -27,7 +36,8 @@
         </li>
       </ul>
       {% if g.user %}
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <!-- .navbar-nav-right 클래스 추가 -->
+      <ul class="navbar-nav navbar-nav-right mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('mypage.mypage') }}"
             ><i class="bi bi-person-lines-fill mx-2"></i>마이페이지</a
@@ -39,11 +49,9 @@
             g.user.username }} (로그아웃)</a
           >
         </li>
-        <li class="nav-item"></li>
       </ul>
-
       {% else %}
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav navbar-nav-right mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
         </li>
