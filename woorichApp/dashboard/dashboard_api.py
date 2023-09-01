@@ -62,9 +62,32 @@ conn = pymysql.connect(
 
 df_apart = pd.read_sql("select * from df_apart",conn) 
 print(df_apart)
-# 행정동 코드 입력 시, 해당 동의 아파트 가격 추이를 그래프로 리턴하는 함수
+
 
 # 분석5: 해당 동의 가장 최근(2022) 아파트 평균 가격 및 6억 이상 아파트 비율
+def avg_apartment_prices(dong_code):
+    # 입력 받은 행정동 명에 해당하는 행을 필터링
+    dong_row = df_apart[df_apart['dong_code'] == dong_code]
+
+    if dong_row.empty:
+        return "행정동을 찾을 수 없습니다."
+
+    # 해당 행정동의 2022년 평균 아파트 가격을 계산
+    avg_price_2022 = dong_row[dong_row['year'] == 2022]['avg_price'].mean()
+
+    # 해당 행정동의 6억 이상 아파트 비율을 계산
+    total_apartments = dong_row[dong_row['year'] == 2022]['~1'] + dong_row[dong_row['year'] == 2022]['1~2'] + dong_row[dong_row['year'] == 2022]['2~3'] + dong_row[dong_row['year'] == 2022]['3~4'] + dong_row[dong_row['year'] == 2022]['4~5'] + dong_row[dong_row['year'] == 2022]['5~6'] + dong_row[dong_row['year'] == 2022]['6~']
+    apartments_over_6 = dong_row[dong_row['year'] == 2022]['6~']
+    over_6_ratio = apartments_over_6.sum() / total_apartments.sum()
+
+    # 결과 출력
+    result = f"해당 행정동의 2022년 평균 아파트 가격: {avg_price_2022:,.2f}원"
+    result += f"\n해당 행정동의 2022년 6억 이상 아파트 비율: {over_6_ratio:.2%}"
+
+    return result
+
+
+# 분석6: 행정동 코드 입력 시, 해당 동의 아파트 가격 추이를 그래프로 리턴하는 함수
 def visualize_avg_apt_prices(dong_code):
     year_quarter = []
     list_num = []
@@ -94,3 +117,4 @@ def visualize_avg_apt_prices(dong_code):
     graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     # return fig.show()
     return graphJSON
+
