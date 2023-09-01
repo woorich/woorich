@@ -313,6 +313,11 @@ data = {
         '경도': 127.14766,
         '줌비율': 12.24
     },
+    '행정구': {
+        '위도': 37.5665,
+        '경도': 126.978,
+        '줌비율': 10.2
+    },
 };
 
 // Add a change event listener to the select element
