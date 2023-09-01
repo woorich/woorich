@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, session, flash, url_for, jsonify, g
-from flask_login import login_required, current_user
+from woorichApp.views.auth_views import login_required
 from woorichApp import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..models import User
@@ -19,16 +19,16 @@ def mypage():
 @login_required
 def update_user_info(user_id):
     user = User.query.filter_by(user_id=user_id).first()
-    print(user)
-    if g.user != user.user_id:
+    form = UserUpdateForm(obj=user)
+    
+    if g.user.user_id != user.user_id:
         flash('로그인 해주세요.')
-        return redirect(url_for('mypage/mypage.html', user_id=user_id))
+        return redirect(url_for('auth.login'))
     if request.method == 'POST':
-        form = UserUpdateForm()
         if form.validate_on_submit():
             form.populate_obj(user)
             db.session.commit()
-            return redirect(url_for('mypage/mypage.html', user_id=user_id))
+            return redirect(url_for('mypage.mypage', user_id=user.user_id, form=form))
     else: # GET 요청
         form = UserUpdateForm(obj=user)
-    return render_template('mypage/mypage.html', form=form)
+    return render_template('mypage/mypage.html', user=user, form=form)
