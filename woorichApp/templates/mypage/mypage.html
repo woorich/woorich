@@ -51,79 +51,51 @@
         <h2>계정 설정</h2>
         <form method="POST">
           <!-- CSRF 토큰 필드 추가 -->
-          <input
-            type="hidden"
-            id="csrf_token"
-            value="{{ form.csrf_token() }}"
-          />
+          {{ form.csrf_token() }}
 
-          <div class="row">
+          <div class="row text-left">
             <!-- 첫 번째 행 -->
             <div class="col">
-              <label>사용자명</label>
-              <input
-                type="text"
-                id="username"
-                value="{{ form.username }}"
-                disabled
-              />
+              <label for="username">사용자명</label>
+              {{ form.username(class='form-control', id='username',
+              disabled=true) }}
             </div>
             <div class="col">
-              <label>ID</label>
-              <input
-                type="text"
-                id="user_id"
-                value="{{ form.user_id }}"
-                disabled
-              />
+              <label for="user_id">ID</label>
+              {{ form.user_id(class='form-control', id='user_id', disabled=true)
+              }}
             </div>
           </div>
 
           <!-- 두 번째 행 -->
-          <div class="row">
+          <div class="row text-left">
             <div class="col">
-              <label>새로운 비밀번호</label>
-              <input
-                type="password"
-                id="password"
-                value="{{ form.password(class='form-control') }}"
-              />
+              <label for="user_pw1">새로운 비밀번호</label>
+              {{ form.user_pw1(class='form-control', id='user_pw1') }}
             </div>
             <div class="col">
-              <label>Email</label>
-              <input
-                type="email"
-                id="email"
-                value="{{ form.email(class='form-control') }}"
-              />
+              <label for="email">Email</label>
+              {{ form.email(class='form-control', id='email') }}
             </div>
           </div>
 
           <!-- 세 번째 행 -->
-          <div class="row">
+          <div class="row text-left">
             <div class="col">
-              <label>새로운 비밀번호 확인</label>
-              <input type="password" id="confirm_password" />
+              <label for="user_pw2">새로운 비밀번호 확인</label>
+              {{ form.user_pw2(class='form-control', id='user_pw2') }}
             </div>
             <div class="col">
-              <label>Phone</label>
-              <input
-                type="tel"
-                id="phone"
-                value="{{ form.phone(class='form-control') }}"
-              />
+              <label for="phone">Phone</label>
+              {{ form.phone(class='form-control', id='phone') }}
             </div>
           </div>
 
           <!-- 네 번째 행 -->
-          <div class="row">
+          <div class="row text-left">
             <div class="col">
-              <label>Address</label>
-              <input
-                type="text"
-                id="address"
-                value="{{ form.address(class='form-control') }}"
-              />
+              <label for="address">Address</label>
+              {{ form.address(class='form-control', id='address') }}
             </div>
           </div>
 
