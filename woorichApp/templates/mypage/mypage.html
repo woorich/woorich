@@ -37,8 +37,8 @@
       <div class="mb-5">
         <h3>{{ user.username }}님</h3>
         <ul>
-          <li>스크랩 목록</li>
-          <li><a href="#" id="show_account_settings">계정 설정</a></li>
+          <li><a href="{{ url_for('mypage.scrap_list') }}">스크랩 목록</a></li>
+          <li><a href="{{ url_for('mypage.update_user_info', user_id=user.user_id) }}" id="show_account_settings">계정 설정</a></li>
           <li><a href="{{ url_for('auth.delete_account') }}">계정 탈퇴</a></li>
         </ul>
       </div>
@@ -47,7 +47,7 @@
     <!-- Right Content -->
     <div id="right-content" class="right-section col-9 bg-light text-center">
       <!-- Account Settings Form (Initially hidden) -->
-      <div id="account-settings-form" style="display: none">
+      <div id="account-settings-form">
         <h2>계정 설정</h2>
         <form
           method="POST"
@@ -103,6 +103,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary">회원정보수정</button>
+          <a href="{{ url_for('auth.delete_account') }}"type="submit" class="btn btn-danger">회원 탈퇴</a>
         </form>
       </div>
     </div>

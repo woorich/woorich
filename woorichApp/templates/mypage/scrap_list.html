@@ -46,13 +46,7 @@
 
     <!-- Right Content -->
     <div id="right-content" class="right-section col-9 bg-light text-center">
-      <h1 class="my-5">회원탈퇴</h1>
-      <p class="my-5">정말로 회원 탈퇴를 하시겠습니까?</p>
-      <form method="post">
-        {{ form.csrf_token }}  {% include "form_errors.html" %}
-        <button type="submit" class="btn btn-danger">예</button>
-        <button><a href="{{ url_for('mypage.update_user_info', user_id=user.user_id) }}" class="btn btn-secondary">취소</button></a>
-      </form>
+      <h1>스크랩 목록</h1>
     </div>
   </div>
 </div>
