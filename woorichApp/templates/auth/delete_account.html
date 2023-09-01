@@ -3,6 +3,7 @@
   <h1>회원탈퇴</h1>
   <p>정말로 회원 탈퇴를 하시겠습니까?</p>
   <form method="post">
+    {{ form.csrf_token }}  {% include "form_errors.html" %}
     <button type="submit" class="btn btn-danger">예</button>
     <button><a href="#" class="btn btn-secondary">취소</button></a>
   </form>

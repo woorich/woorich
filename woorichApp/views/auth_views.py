@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
 from woorichApp import db
-from woorichApp.forms import UserCreateForm, UserLoginForm
+from woorichApp.forms import UserCreateForm, UserLoginForm, UserDeleteForm
 from woorichApp.models import User
 import functools
 import datetime
@@ -79,6 +79,9 @@ def login_required(view):
 @bp.route('/delete-account', methods=['GET', 'POST'])
 @login_required
 def delete_account():
+
+    # CSRF_TOKEN을 전달하기 위하여 아무것도 없는 UserDeleteForm 을 생성하여 이용합니다.
+    form = UserDeleteForm()
     if request.method == 'POST':
         # g.user.delete()
         print(g.user)
@@ -87,4 +90,4 @@ def delete_account():
         logout()
         flash('계정이 성공적으로 삭제되었습니다.')
         return redirect(url_for('main.index'))
-    return render_template('auth/delete_account.html')
+    return render_template('auth/delete_account.html', form=form)
