@@ -8,12 +8,20 @@
         <h5>상권분석</h5>
         <h1>{{ gu }}  {{ dong }}  {{ dong_code }}</h1>
         <div>
-            <div class="chart" id="bargraph">
-                <script>
-                    var graphs = {{plot | safe}};
-                    Plotly.plot('bargraph',graphs,{});
-                </script>
+            <div class="p-3 m-3 border rounded" style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e;">
+                <span>분석5: 해당 동의 가장 최근(2022) 아파트 평균 가격 및 6억 이상 아파트 비율</span>
+                <h5 class="mt-2">{{ apart_text }}</h5>
             </div>
+            <div class="p-3 m-3 border rounded" style="font-size: larger; width: max-content;">
+                <span>분석6: 행정동 코드 입력 시, 해당 동의 아파트 가격 추이를 그래프로 리턴하는 함수</span>
+                <div class="chart" id="bargraph">
+                    <script>
+                        var graphs = {{plot | safe}};
+                        Plotly.plot('bargraph',graphs,{});
+                    </script>
+                </div>
+            </div>
+            
         </div>
     </div>
     <script defer src="{{ url_for('static', filename='/js/report.js') }}"></script>

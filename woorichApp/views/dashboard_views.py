@@ -19,7 +19,7 @@ def index():
 
 @bp.route('/report')
 def report():
-    from woorichApp.dashboard.dashboard_api import visualize_avg_apt_prices
+    from woorichApp.dashboard.dashboard_api import visualize_avg_apt_prices, avg_apartment_prices
     dong_code = request.args.get('dong_code')
     dong = request.args.get('dong')
     gu = request.args.get('gu')
@@ -27,5 +27,6 @@ def report():
     # Use dong_code and dong_name to retrieve the necessary data for your report
     # You can also retrieve other parameters as needed
     bar = visualize_avg_apt_prices(dong_code)
-    return render_template('dashboard/analysis-report.html', dong_code=dong_code, dong=dong, gu=gu, plot=bar)
+    text_result = avg_apartment_prices(dong_code)
+    return render_template('dashboard/analysis-report.html', dong_code=dong_code, dong=dong, gu=gu, plot=bar, apart_text=text_result)
 
