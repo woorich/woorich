@@ -32,7 +32,6 @@ class Reply(db.Model):
     admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
     board_no = db.Column(db.Integer, db.ForeignKey('board.no', ondelete='CASCADE'))
     board = db.relationship(Board, backref=db.backref('reply'))
-    admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
 
 class Admin(db.Model):
     __tablename__ = 'admin'
@@ -51,18 +50,4 @@ class History(db.Model):
     link = db.Column(db.String(200), nullable=False)
     user_no = db.Column(db.Integer, db.ForeignKey('user.no', ondelete='CASCADE'), nullable=False)
     user = db.relationship(User, backref=db.backref('history_set'))
-
-# class Userinfo(db.Model):
-#     no = db.Column(db.Integer, primary_key=True)
-#     user_no = db.Column(db.Integer, db.ForeignKey('user.no', ondelete='CASCADE'), nullable=False)
-#     age = db.Column(db.Integer, nullable=False)
-#     job = db.Column(db.String(45), nullable=False)
-#     marital = db.Column(db.Integer, nullable=False)
-#     education = db.Column(db.String(45), nullable=False)
-#     default = db.Column(db.Integer, nullable=False)
-#     housing = db.Column(db.Integer, nullable=False)
-#     loan = db.Column(db.Integer, nullable=False)
-#     balance = db.Column(db.Integer, nullable=False)
-
-
-
+    

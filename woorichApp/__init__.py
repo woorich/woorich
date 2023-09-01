@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_wtf.csrf import CSRFProtect
+from flask_login import LoginManager
 
 import config
 
@@ -18,6 +19,9 @@ db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
 csrf = CSRFProtect()
 
+# Flask-Login 설정
+login_manager = LoginManager()
+
 
 def create_app():
     app = Flask(__name__)
@@ -30,6 +34,15 @@ def create_app():
     else:
         migrate.init_app(app, db)
     from . import models
+
+    # Flask-Login 초기화
+    login_manager.init_app(app)
+    from .models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
 
     csrf.init_app(app)
     

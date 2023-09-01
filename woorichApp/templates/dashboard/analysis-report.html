@@ -3,16 +3,17 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 
-    <a class="btn" href="{{ url_for('dashboard.index') }}">다시 검색하기</a>
+    <a class="btn btn-warning my-3" href="#" role="button" href="{{ url_for('dashboard.index') }}">다시 검색하기</a>
     <div class="container-fluid">
-        <h3>{{ dong_code }}</h3>
-        <h1>{{ gu }}  {{ dong }}</h1>
+        <h5>상권분석</h5>
+        <h1>{{ gu }}  {{ dong }}  {{ dong_code }}</h1>
         <div>
             <div class="chart" id="bargraph">
                 <script>
                     var graphs = {{plot | safe}};
                     Plotly.plot('bargraph',graphs,{});
                 </script>
+            </div>
         </div>
     </div>
     <script defer src="{{ url_for('static', filename='/js/report.js') }}"></script>
