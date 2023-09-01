@@ -1,15 +1,119 @@
 <!-- mypage.html -->
 {% extends "layouts/base.html" %} {% block content %}
-<h1>안녕하세요, {{ user.username }}님!</h1>
-<p>고객님의 ID는: {{ user_no }}입니다.</p>
-<a href="{{ url_for('auth.delete_account') }}" class="btn btn-danger"
-  >회원탈퇴</a
->
-<h2>게시글 목록</h2>
-<ul>
-  {% for board in user.board_set %}
-  <!-- 변경된 데이터 모델에 맞게 board_set 사용 -->
-  <li>{{ board.b_title }}</li>
-  {% endfor %}
-</ul>
+<style>
+  .left-section {
+    height: 100vh; /* 사이드바 길이를 늘림 */
+  }
+  .left-section h3 {
+    font-size: 2.5em; /* 사용자명 글씨 크기 */
+    margin-bottom: 100px; /* h3와 ul 사이의 간격을 조정 */
+  }
+  .left-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .left-section ul li {
+    font-size: 1.5em; /* 목록 글씨 크기 */
+    margin-bottom: 50px; /* 목록 사이의 간격 */
+  }
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"] {
+    width: 60%; /* 폼의 너비 */
+    height: 40px; /* 폼의 높이 */
+  }
+  .row {
+    margin-bottom: 40px; /* 각 행의 아래쪽에 마진을 추가 */
+  }
+  h2 {
+    margin-bottom: 50px; /* '계정 설정' 텍스트와 아래 항목들 사이의 간격을 넓힘 */
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Left Sidebar -->
+    <div class="left-section col-3 p-4 mb-3 text-secondary shadow">
+      <div class="mb-5">
+        <h3>{{ user.username }}님</h3>
+        <ul>
+          <li>스크랩 목록</li>
+          <li><a href="#" id="show_account_settings">계정 설정</a></li>
+          <li><a href="{{ url_for('auth.delete_account') }}">계정 탈퇴</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Content -->
+    <div id="right-content" class="right-section col-9 bg-light text-center">
+      <!-- Account Settings Form (Initially hidden) -->
+      <div id="account-settings-form" style="display: none">
+        <h2>계정 설정</h2>
+        <form
+          method="POST"
+          action="{{ url_for('mypage.update_user_info', user_id=user.user_id) }}"
+        >
+          <!-- CSRF 토큰 필드 추가 -->
+          {{ form.csrf_token() }}
+
+          <div class="row text-left">
+            <!-- 첫 번째 행 -->
+            <div class="col">
+              <label for="username">사용자명</label>
+              {{ form.username(class='form-control', id='username',
+              disabled=true) }}
+            </div>
+            <div class="col">
+              <label for="user_id">ID</label>
+              {{ form.user_id(class='form-control', id='user_id', disabled=true)
+              }}
+            </div>
+          </div>
+
+          <!-- 두 번째 행 -->
+          <div class="row text-left">
+            <div class="col">
+              <label for="user_pw1">새로운 비밀번호</label>
+              {{ form.user_pw1(class='form-control', id='user_pw1') }}
+            </div>
+            <div class="col">
+              <label for="email">Email</label>
+              {{ form.email(class='form-control', id='email') }}
+            </div>
+          </div>
+
+          <!-- 세 번째 행 -->
+          <div class="row text-left">
+            <div class="col">
+              <label for="user_pw2">새로운 비밀번호 확인</label>
+              {{ form.user_pw2(class='form-control', id='user_pw2') }}
+            </div>
+            <div class="col">
+              <label for="phone">Phone</label>
+              {{ form.phone(class='form-control', id='phone') }}
+            </div>
+          </div>
+
+          <!-- 네 번째 행 -->
+          <div class="row text-left">
+            <div class="col">
+              <label for="address">Address</label>
+              {{ form.address(class='form-control', id='address') }}
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">회원정보수정</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // 계정 설정을 클릭했을 때 폼을 표시합니다.
+  document
+    .getElementById("show_account_settings")
+    .addEventListener("click", function () {
+      document.getElementById("account-settings-form").style.display = "block";
+    });
+</script>
 {% endblock %}

@@ -21,3 +21,15 @@ class UserCreateForm(FlaskForm):
 class UserLoginForm(FlaskForm):
     user_id = StringField('사용자이름', validators=[DataRequired(), Length(min=5, max=25)])
     user_pw = PasswordField('비밀번호', validators=[DataRequired()])
+
+class UserUpdateForm(FlaskForm):
+    user_id = StringField('사용자이름', validators=[DataRequired(), Length(min=3, max=25)])
+    username = StringField('실명', validators=[DataRequired(), Length(max=25)])
+    user_pw1 = PasswordField('비밀번호', validators=[DataRequired(), EqualTo('user_pw2', '비밀번호가 일치하지 않습니다')])
+    user_pw2 = PasswordField('비밀번호확인', validators=[DataRequired()])
+    email = EmailField('이메일', validators=[DataRequired(), Email()])
+    phone = StringField('전화번호', validators=[DataRequired()])
+    address = StringField('주소', validators=[DataRequired()])
+
+class UserDeleteForm(FlaskForm):
+    pass
