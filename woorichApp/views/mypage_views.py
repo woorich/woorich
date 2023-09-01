@@ -16,19 +16,18 @@ def mypage():
 
 # https://github.com/YeonjiKim0316/flask_0711_1/blob/main/app/views/question_views.py 의 modify(question_id) 함수 참조  
 @bp.route('/update_user_info/<user_id>', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def update_user_info(user_id):
     user = User.query.filter_by(user_id=user_id).first()
-    print(user)
-    if g.user != user.user_id:
+    form = UserUpdateForm(obj=user)
+    if g.user.user_id != user.user_id:
         flash('로그인 해주세요.')
-        return redirect(url_for('mypage/mypage.html', user_id=user_id))
+        return redirect(url_for('auth.login'))
     if request.method == 'POST':
-        form = UserUpdateForm()
         if form.validate_on_submit():
             form.populate_obj(user)
             db.session.commit()
-            return redirect(url_for('mypage/mypage.html', user_id=user_id))
+            return redirect(url_for('mypage.mypage', user_id=user.user_id, form=form))
     else: # GET 요청
         form = UserUpdateForm(obj=user)
-    return render_template('mypage/mypage.html', form=form)
+    return render_template('mypage/mypage.html',user=user,  form=form)
