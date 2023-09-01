@@ -36,6 +36,7 @@ fetch(staticUrl + 'gu-dong-coord-data.csv', {
         selectElementDong.innerHTML = '';
 
         const selectedGu = selectElementGu.value;
+        console.log(selectedGu);
 
         csvArray.forEach(row => {
             const guValue = row[2];
@@ -48,6 +49,12 @@ fetch(staticUrl + 'gu-dong-coord-data.csv', {
                 selectElementDong.appendChild(option);
             }
         });
+
+        // map 의 focusing 변경 + 색 강조 + map의 해당 구역은 popup 띄우기 
+        var urlString = location.href;
+        console.log(urlString, selectElementGu.value);
+
+
     });
 })
 .catch(error => console.error('Error:', error));
@@ -141,16 +148,16 @@ map.on('load', function() {
     })
     .catch(error => console.error('Error loading CSV:', error));
 
-    markers.forEach(marker => {
-        marker.getElement().addEventListener('mouseenter', () => {
-            marker.togglePopup(); // Show the popup when hovered
-        });
+    // markers.forEach(marker => {
+    //     marker.getElement().addEventListener('mouseenter', () => {
+    //         marker.togglePopup(); // Show the popup when hovered
+    //     });
     
-        marker.getElement().addEventListener('mouseleave', () => {
-            marker.togglePopup(); // Hide the popup when not hovered
-        });
+    //     marker.getElement().addEventListener('mouseleave', () => {
+    //         marker.togglePopup(); // Hide the popup when not hovered
+    //     });
 
-    });
+    // });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
