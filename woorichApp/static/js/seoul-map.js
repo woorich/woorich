@@ -2,7 +2,7 @@ const selectElementGu = document.getElementById('dynamic-select-gu');
 const selectElementDong = document.getElementById('dynamic-select-dong');
 
 //const staticUrl = document.currentScript.getAttribute('staticUrl');
-fetch(staticUrl + 'gu-dong-coord-data.csv', {
+fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
     headers: {
         'Content-Type': 'text/csv; charset=cp-949' // character encoding
     }
@@ -111,7 +111,7 @@ map.on('load', function() {
     
     const markers = []
     // Fetch and add markers and popups
-    fetch(staticUrl + 'gu-dong-coord-data.csv')
+    fetch(staticUrl + '/data/gu-dong-coord-data.csv')
     .then(response => response.text())
     .then(csvData => {             
         const rows = csvData.split('\n');
@@ -171,7 +171,7 @@ function show_report() {
     var resultDiv = document.getElementById('result');
     resultDiv.innerHTML = "<br> 선택된 행정구: " + "<h3>" + selectedGu + "</h3>" + "<br> 선택된 행정동: " + "<h3>" + selectedDong+"</h3><br>";
 
-    fetch(staticUrl+'gu-dong-coord-data.csv')
+    fetch(staticUrl+'/data/gu-dong-coord-data.csv')
     .then(response => response.text())
     .then(csvData => {
         const rows = csvData.split('\n');
