@@ -1,6 +1,6 @@
 const selectElementGu = document.getElementById('dynamic-select-gu');
 const selectElementDong = document.getElementById('dynamic-select-dong');
-
+let csvArray;
 //const staticUrl = document.currentScript.getAttribute('staticUrl');
 fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
     headers: {
@@ -9,8 +9,7 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
 })
 .then(response => response.text())
 .then(csvData => {
-    const csvArray = csvData.split('\n').map(row => row.split(','));
-
+    csvArray = csvData.split('\n').map(row => row.split(','));
     const header = csvArray[0];
     if (header.length > 1) {
         csvArray.shift();
@@ -36,7 +35,6 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
         selectElementDong.innerHTML = '';
 
         const selectedGu = selectElementGu.value;
-        console.log(selectedGu);
 
         csvArray.forEach(row => {
             const guValue = row[2];
@@ -52,7 +50,6 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
 
         // map 의 focusing 변경 + 색 강조 + map의 해당 구역은 popup 띄우기 
         var urlString = location.href;
-        console.log(urlString, selectElementGu.value);
 
 
     });
@@ -84,6 +81,7 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', function() {
+
     map.addSource('tileset_data', {
         "url": "mapbox://wooyoonwinnie.aahbjlxw",
         "type": "vector"
@@ -103,49 +101,12 @@ map.on('load', function() {
         'source': 'tileset_data',
         'source-layer': 'seoul_gu-3hhcst',
         'paint': {
-            'fill-color': 'hsla(248, 53%, 58%, 0.5)',
+            'fill-color': 'hsla(335, 100%, 73%, 0.32)',
             'fill-opacity': 0.75,
             'fill-outline-color': 'hsl(0, 100%, 100%)'
         }
     });
     
-    const markers = []
-    // Fetch and add markers and popups
-    fetch(staticUrl + '/data/gu-dong-coord-data.csv')
-    .then(response => response.text())
-    .then(csvData => {             
-        const rows = csvData.split('\n');
-        for(let i=0; i < rows.length;i++){
-            let item = rows[i].split(',');
-            let dong_code = item[1];
-            let index = item[0];
-            let gu = item[2];
-            let dong_name = item[3];
-            let latitude = parseFloat(item[4]);
-            let longitude = parseFloat(item[5]);
-            if (!isNaN(latitude) && !isNaN(longitude)){
-                const marker = new mapboxgl.Marker({color: 'white'})
-                .setLngLat([longitude, latitude])
-                .addTo(map);
-        
-                const popup = new mapboxgl.Popup({ closeButton: false, offset: 25 }) // Customize popup behavior
-                .setLngLat([longitude, latitude])
-                .setHTML(`
-                    <div class="container d-flex flex-column align-baseline px-2 rounded">
-                        <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
-                        <a href='/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong_name}' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
-                        <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
-                    </div>
-                `)
-
-                marker.setPopup(popup);
-            
-                markers.push(marker);
-
-            }
-        }
-    })
-    .catch(error => console.error('Error loading CSV:', error));
 
     // markers.forEach(marker => {
     //     marker.getElement().addEventListener('mouseenter', () => {
@@ -197,7 +158,11 @@ fetch(staticUrl+'/data/gu-geo.json')
     .then(data => {
         // Add a change event listener to the select element
         data = JSON.parse(data);
+        const markers = [];
         selectElementGu.addEventListener('change', (event) => {
+            if (markers){
+                markers.forEach(marker =>  marker.remove());
+            }
             // Retrieve the selected district value
             const selectedDistrict = event.target.value;
 
@@ -212,5 +177,42 @@ fetch(staticUrl+'/data/gu-geo.json')
             map.flyTo({ center: [long, lat], zoom: zoom_num });
             
             // Add more conditions for other districts as needed
-        });
-    });
+            const dongs_in_gu = [];
+            // Fetch and add markers and popups
+            for(i in csvArray){
+                let item = csvArray[i];
+                let gu = item[2];
+                let latitude = parseFloat(item[4]);
+                let longitude = parseFloat(item[5]);
+                if ((selectedDistrict == gu) && !isNaN(latitude) && !isNaN(longitude)){
+                    dongs_in_gu.push(item);        
+                }
+            } 
+            for(i in dongs_in_gu){
+                let item = dongs_in_gu[i];
+                let index = item[0];
+                let dong_code = item[1];
+                let gu = item[2];
+                let dong_name = item[3];
+                let latitude = parseFloat(item[4]);
+                let longitude = parseFloat(item[5]);
+
+                const marker = new mapboxgl.Marker({color: 'white'})
+                .setLngLat([longitude, latitude])
+                .addTo(map);
+        
+                const popup = new mapboxgl.Popup({ closeButton: false, offset: 25 }) // Customize popup behavior
+                .setLngLat([longitude, latitude])
+                .setHTML(`
+                    <div class="container d-flex flex-column align-baseline px-2 rounded">
+                        <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
+                        <a href='/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong_name}' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
+                        <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
+                    </div>
+                `)
+
+                marker.setPopup(popup);  
+                markers.push(marker);
+            }
+    })
+});
