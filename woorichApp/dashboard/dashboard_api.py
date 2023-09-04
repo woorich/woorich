@@ -67,8 +67,9 @@ print(df_apart)
 # 분석5: 해당 동의 가장 최근(2022) 아파트 평균 가격 및 6억 이상 아파트 비율
 def avg_apartment_prices(dong_code):
     # 입력 받은 행정동 명에 해당하는 행을 필터링
-    dong_row = df_apart[df_apart['dong_code'] == dong_code]
-
+    dong_row = df_apart[df_apart['dong_code'] == int(dong_code)]
+    print(type(dong_code))
+    print(df_apart.info())
     if dong_row.empty:
         return "행정동을 찾을 수 없습니다."
 
@@ -94,7 +95,7 @@ def visualize_avg_apt_prices(dong_code):
     for year in  range(2017,2023):
         for quarter in range(1, 5):
             filtered_df = df_apart[
-            (df_apart['dong_code'] == dong_code) &
+            (df_apart['dong_code'] == int(dong_code)) &
             (df_apart['year'] == year) &
             (df_apart['quarter'] == quarter)
             ]
