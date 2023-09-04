@@ -123,7 +123,6 @@ map.on('load', function() {
             let dong_name = item[3];
             let latitude = parseFloat(item[4]);
             let longitude = parseFloat(item[5]);
-            console.log(dong_code, gu, dong_name, latitude, longitude);
             if (!isNaN(latitude) && !isNaN(longitude)){
                 const marker = new mapboxgl.Marker({color: 'white'})
                 .setLngLat([longitude, latitude])
@@ -183,7 +182,6 @@ function show_report() {
             let latitude = item[4];
             let longitude = item[5];
             if ((selectedGu == gu) && (selectedDong == dong)) {
-                console.log(dong_code, gu, dong, latitude, longitude);
                 window.location.href = `/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong}`;
                 break;
             }
@@ -194,154 +192,25 @@ function show_report() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-data = {
-    '종로구': {
-        '위도': 37.59552,
-        '경도': 126.99046,
-        '줌비율' : 12
-    },
-    '중구': {
-        '위도': 37.55918,
-        '경도': 126.99627,
-        '줌비율' : 12.93
-    },
-    '용산구': {
-        '위도': 37.53014,
-        '경도': 126.98315,
-        '줌비율': 12.4
-    },
-    '성동구': {
-        '위도': 37.54973,
-        '경도': 127.04218,
-        '줌비율': 12.4
-    },
-    '광진구': {
-        '위도': 37.54798,
-        '경도': 127.0851,
-        '줌비율': 12.4
-    },
-    '동대문구': {
-        '위도': 37.58219,
-        '경도': 127.05494,
-        '줌비율': 12.59
-    },
-    '중랑구': {
-        '위도': 37.59424,
-        '경도': 127.09172,
-        '줌비율': 12.4
-    },
-    '성북구': {
-        '위도': 37.60399,
-        '경도': 127.0174,
-        '줌비율': 12.24
-    },
-    '강북구': {
-        '위도': 37.6471,
-        '경도': 127.02109,
-        '줌비율': 12.05
-    },
-    '도봉구': {
-        '위도': 37.66415,
-        '경도': 127.04318,
-        '줌비율': 12.05 
-    },
-    '노원구': {
-        '위도': 37.65147,
-        '경도': 127.07322,
-        '줌비율': 11.86
-    },
-    '은평구': {
-        '위도': 37.61528,
-        '경도': 126.91857,
-        '줌비율': 11.86
-    },
-    '서대문구': {
-        '위도': 37.58226,
-        '경도': 126.93719,
-        '줌비율': 12.42
-    },
-    '마포구': {
-        '위도': 37.56177,
-        '경도': 126.91402,
-        '줌비율': 12.42
-    },
-    '양천구': {
-        '위도': 37.52748,
-        '경도': 126.85543,
-        '줌비율': 12.96
-    },
-    '강서구': {
-        '위도': 7.56669,
-        '경도': 126.82436,
-        '줌비율': 12.05
-    },
-    '구로구': {
-        '위도': 37.49738,
-        '경도': 126.85789,
-        '줌비율': 12.77
-    },
-    '금천구': {
-        '위도': 37.46285,
-        '경도': 126.90602,
-        '줌비율': 12.4
-    },
-    '영등포구': {
-        '위도': 37.51974,
-        '경도': 126.90889,
-        '줌비율': 12.18
-    },
-    '동작구': {
-        '위도': 37.49729,
-        '경도': 126.94508,
-        '줌비율': 12.74
-    },
-    '관악구': {
-        '위도': 37.46832,
-        '경도': 126.94891,
-        '줌비율': 12.4
-    },
-    '서초구': {
-        '위도': 37.4795,
-        '경도': 127.0335,
-        '줌비율': 11.68
-    },
-    '강남구': {
-        '위도': 37.49601,
-        '경도': 127.06341,
-        '줌비율': 11.87
-    },
-    '송파구': {
-        '위도': 37.50532,
-        '경도': 127.11579,
-        '줌비율': 12.05
-    },
-    '강동구': {
-        '위도': 37.54623,
-        '경도': 127.14766,
-        '줌비율': 12.24
-    },
-    '행정구': {
-        '위도': 37.5665,
-        '경도': 126.978,
-        '줌비율': 10.2
-    },
-};
+fetch(staticUrl+'/data/gu-geo.json')
+    .then(response => response.text())
+    .then(data => {
+        // Add a change event listener to the select element
+        data = JSON.parse(data);
+        selectElementGu.addEventListener('change', (event) => {
+            // Retrieve the selected district value
+            const selectedDistrict = event.target.value;
 
-// Add a change event listener to the select element
-selectElementGu.addEventListener('change', (event) => {
-    // Retrieve the selected district value
-    const selectedDistrict = event.target.value;
+            // Use the selected district value to focus the map
+            // Replace this with your actual logic to focus on the selected district
+            // For example, you can use geocoding or known coordinates to center the map on the selected district.
+            // Here's a simplified example
 
-    // Use the selected district value to focus the map
-    // Replace this with your actual logic to focus on the selected district
-    // For example, you can use geocoding or known coordinates to center the map on the selected district.
-    // Here's a simplified example
-
-    let lat = data[selectedDistrict]['위도'];
-    let long = data[selectedDistrict]['경도'];
-    let zoom_num = data[selectedDistrict]['줌비율'];
-    console.log(long, lat, zoom_num);
-    map.flyTo({ center: [long, lat], zoom: zoom_num });
-    
-    // Add more conditions for other districts as needed
-});
+            let lat = data[selectedDistrict]['위도'];
+            let long = data[selectedDistrict]['경도'];
+            let zoom_num = data[selectedDistrict]['줌비율'];
+            map.flyTo({ center: [long, lat], zoom: zoom_num });
+            
+            // Add more conditions for other districts as needed
+        });
+    });
