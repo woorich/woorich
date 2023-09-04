@@ -1,6 +1,7 @@
 const selectElementGu = document.getElementById('dynamic-select-gu');
 const selectElementDong = document.getElementById('dynamic-select-dong');
 let csvArray;
+const markers = [];
 //const staticUrl = document.currentScript.getAttribute('staticUrl');
 fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
     headers: {
@@ -47,11 +48,25 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
                 selectElementDong.appendChild(option);
             }
         });
+        
+        selectElementDong.addEventListener('change',(e)=>{
+            const selectedDong = selectElementDong.value;
 
-        selectElementDong.addEventListener('change',() => {
-            // ✨✨✨ 점심 먹고 작업할 부분 🙋‍♀️🙋‍♀️🙋‍♀️
-            // map 의 해당동의 팝업을 선택한 상태로 동기화해주기. 
-
+            markers.forEach(marker => {
+                const markerDong = marker._popup._classList.values().next().value;
+                
+                if (markerDong === selectedDong) {
+                    if (!marker.getPopup().isOpen()) {
+                        marker.togglePopup();
+                        map.flyTo({ center: [marker.getLngLat().lng, marker.getLngLat().lat], zoom: map.getZoom(), duration: 1200 });
+                    }
+                } else {
+                    if (marker.getPopup().isOpen()) {
+                        marker.togglePopup();
+                    }
+                }
+                
+            });
         })
 
         // map 의 focusing 변경 + 색 강조 + map의 해당 구역은 popup 띄우기 
@@ -61,6 +76,123 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
     });
 })
 .catch(error => console.error('Error:', error));
+
+
+////////////////////////////////////////////////////////////////////////////////
+let geojsonGuData = {
+    "Gangnam-gu": { "Latitude": 37.49601, "Longitude": 127.06341, "Zoom Ratio": 11.87 },
+    "Gangdong-gu": { "Latitude": 37.54623, "Longitude": 127.14766, "Zoom Ratio": 12.24 },
+    "Gangbuk-gu": { "Latitude": 37.6471, "Longitude": 127.02109, "Zoom Ratio": 12.05 },
+};
+
+let convertedGeoJsonData = {
+    type: 'FeatureCollection',
+    features: Object.keys(geojsonGuData).map(key => ({
+        type: 'Feature',
+        properties: { 
+            description: key,
+            zoom_ratio: geojsonGuData[key]["Zoom Ratio"]
+        },
+        geometry: {
+            type: 'Point',
+            coordinates: [
+                geojsonGuData[key]["Longitude"], 
+                geojsonGuData[key]["Latitude"]
+            ]
+        }
+    }))
+};
+fetch(staticUrl+'/data/gu-geo.json')
+    .then(response => response.text())
+    .then(data => {
+        // Add a change event listener to the select element
+        data = JSON.parse(data);
+        selectElementGu.addEventListener('change', (event) => {
+            if (markers){
+                markers.forEach(marker =>  marker.remove());
+            }
+            // Retrieve the selected district value
+            const selectedDistrict = event.target.value;
+
+            // Use the selected district value to focus the map
+            // Replace this with your actual logic to focus on the selected district
+            // For example, you can use geocoding or known coordinates to center the map on the selected district.
+            // Here's a simplified example
+
+            let lat = data[selectedDistrict]['위도'];
+            let long = data[selectedDistrict]['경도'];
+            let zoom_num = data[selectedDistrict]['줌비율'];
+            map.flyTo({ center: [long, lat], zoom: zoom_num });
+            
+            // Add more conditions for other districts as needed
+            const dongs_in_gu = [];
+            // Fetch and add markers and popups
+            for(i in csvArray){
+                let item = csvArray[i];
+                let gu = item[2];
+                let latitude = parseFloat(item[4]);
+                let longitude = parseFloat(item[5]);
+                if ((selectedDistrict == gu) && !isNaN(latitude) && !isNaN(longitude)){
+                    dongs_in_gu.push(item);        
+                }
+            } 
+            for(i in dongs_in_gu){
+                let item = dongs_in_gu[i];
+                let index = item[0];
+                let dong_code = item[1];
+                let gu = item[2];
+                let dong_name = item[3];
+                let latitude = parseFloat(item[4]);
+                let longitude = parseFloat(item[5]);
+
+                const marker = new mapboxgl.Marker({color: 'white'})
+                .setLngLat([longitude, latitude])
+                .addTo(map);
+        
+                const popup = new mapboxgl.Popup({ closeButton: true, offset: 25 }) // Customize popup behavior
+                .setLngLat([longitude, latitude])
+                .setHTML(`
+                    <div class="container d-flex flex-column align-baseline px-2 rounded" id="${dong_name}">
+                        <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
+                        <a href='/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong_name}' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
+                        <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
+                    </div>
+                `)
+                .addClassName(dong_name)
+
+                marker.getElement().addEventListener('click', (e) => {
+                    // let currentUrl = location.href.split('/');
+                    // let currentLat = currentUrl[5];
+                    // let currentLong = currentUrl[6];
+
+                    let selectElementDong = document.getElementById('dynamic-select-dong');
+                    selectElementDong.value = marker._popup._classList.values().next().value
+                    map.flyTo({ center: [longitude, latitude], zoom: zoom_num, duration: 1200 });
+                });
+                marker.setPopup(popup);  
+                markers.push(marker);
+            }
+        })
+
+        convertedGeoJsonData = {
+            type: 'FeatureCollection',
+            features: Object.keys(data).map(key => ({
+                type: 'Feature',
+                properties: { 
+                    description: key,
+                    zoom_ratio: data[key]["줌비율"]
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [
+                        data[key]["위도"], 
+                        data[key]["경도"]
+                    ]
+                }
+            }))
+        };
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -87,7 +219,6 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', function() {
-
     map.addSource('tileset_data', {
         "url": "mapbox://wooyoonwinnie.aahbjlxw",
         "type": "vector"
@@ -112,7 +243,25 @@ map.on('load', function() {
             'fill-outline-color': 'hsl(0, 100%, 100%)'
         }
     });
+
+    console.log(convertedGeoJsonData);
+    map.addSource('points', {
+        'type': 'geojson',
+        'data': convertedGeoJsonData
+    });
     
+    map.addLayer({
+        'id': 'points',
+        'type': 'symbol',
+        'source': 'points',
+        'layout': {
+            'text-field': ['get', 'description'],
+            'text-size': 12
+        },
+        'paint': {
+            'text-color': '#000000'
+        }
+    }, 'fill');
 
     // markers.forEach(marker => {
     //     marker.getElement().addEventListener('mouseenter', () => {
@@ -156,78 +305,3 @@ function show_report() {
     })
     .catch(error => console.error('Error loading CSV:', error));
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-fetch(staticUrl+'/data/gu-geo.json')
-    .then(response => response.text())
-    .then(data => {
-        // Add a change event listener to the select element
-        data = JSON.parse(data);
-        const markers = [];
-        selectElementGu.addEventListener('change', (event) => {
-            if (markers){
-                markers.forEach(marker =>  marker.remove());
-            }
-            // Retrieve the selected district value
-            const selectedDistrict = event.target.value;
-
-            // Use the selected district value to focus the map
-            // Replace this with your actual logic to focus on the selected district
-            // For example, you can use geocoding or known coordinates to center the map on the selected district.
-            // Here's a simplified example
-
-            let lat = data[selectedDistrict]['위도'];
-            let long = data[selectedDistrict]['경도'];
-            let zoom_num = data[selectedDistrict]['줌비율'];
-            map.flyTo({ center: [long, lat], zoom: zoom_num });
-            
-            // Add more conditions for other districts as needed
-            const dongs_in_gu = [];
-            // Fetch and add markers and popups
-            for(i in csvArray){
-                let item = csvArray[i];
-                let gu = item[2];
-                let latitude = parseFloat(item[4]);
-                let longitude = parseFloat(item[5]);
-                if ((selectedDistrict == gu) && !isNaN(latitude) && !isNaN(longitude)){
-                    dongs_in_gu.push(item);        
-                }
-            } 
-            for(i in dongs_in_gu){
-                let item = dongs_in_gu[i];
-                let index = item[0];
-                let dong_code = item[1];
-                let gu = item[2];
-                let dong_name = item[3];
-                let latitude = parseFloat(item[4]);
-                let longitude = parseFloat(item[5]);
-
-                const marker = new mapboxgl.Marker({color: 'white'})
-                .setLngLat([longitude, latitude])
-                .addTo(map);
-        
-                const popup = new mapboxgl.Popup({ closeButton: false, offset: 25 }) // Customize popup behavior
-                .setLngLat([longitude, latitude])
-                .setHTML(`
-                    <div class="container d-flex flex-column align-baseline px-2 rounded" id="${dong_name}">
-                        <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
-                        <a href='/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong_name}' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
-                        <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
-                    </div>
-                `)
-                .addClassName(dong_name)
-
-                marker.getElement().addEventListener('click', (e) => {
-                    // let currentUrl = location.href.split('/');
-                    // let currentLat = currentUrl[5];
-                    // let currentLong = currentUrl[6];
-
-                    let selectElementDong = document.getElementById('dynamic-select-dong');
-                    selectElementDong.value = marker._popup._classList.values().next().value
-                });
-                marker.setPopup(popup);  
-                markers.push(marker);
-            }
-    })
-});
