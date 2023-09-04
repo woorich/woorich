@@ -48,6 +48,12 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
             }
         });
 
+        selectElementDong.addEventListener('change',() => {
+            // ✨✨✨ 점심 먹고 작업할 부분 🙋‍♀️🙋‍♀️🙋‍♀️
+            // map 의 해당동의 팝업을 선택한 상태로 동기화해주기. 
+
+        })
+
         // map 의 focusing 변경 + 색 강조 + map의 해당 구역은 popup 띄우기 
         var urlString = location.href;
 
@@ -204,13 +210,22 @@ fetch(staticUrl+'/data/gu-geo.json')
                 const popup = new mapboxgl.Popup({ closeButton: false, offset: 25 }) // Customize popup behavior
                 .setLngLat([longitude, latitude])
                 .setHTML(`
-                    <div class="container d-flex flex-column align-baseline px-2 rounded">
+                    <div class="container d-flex flex-column align-baseline px-2 rounded" id="${dong_name}">
                         <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
                         <a href='/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong_name}' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
                         <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
                     </div>
                 `)
+                .addClassName(dong_name)
 
+                marker.getElement().addEventListener('click', (e) => {
+                    // let currentUrl = location.href.split('/');
+                    // let currentLat = currentUrl[5];
+                    // let currentLong = currentUrl[6];
+
+                    let selectElementDong = document.getElementById('dynamic-select-dong');
+                    selectElementDong.value = marker._popup._classList.values().next().value
+                });
                 marker.setPopup(popup);  
                 markers.push(marker);
             }
