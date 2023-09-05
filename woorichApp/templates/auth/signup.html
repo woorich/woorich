@@ -1,10 +1,16 @@
 {% extends "layouts/base.html" %} {% block content %}
+<style>
+  .bi{
+    color:rgb(186, 186, 186)
+  }
+</style>
 <div class="container w-50 my-1 p-4" style="box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);">
   <div class="my-1 w-50 mx-auto">
-    <h3 class="my-3 pb-2 text-secondary">계정생성</h3>
+    <h3 class="mx-3 mb-4 pb-2 px-2 text-secondary">계정생성</h3>
     <form method="post">
       {{ form.csrf_token }} {% include "form_errors.html" %}
-      <div class="mb-4">
+      <div class="mb-4 d-flex center-block">
+        <i class="bi bi-person p-2"></i>
         <input
           type="text"
           class="form-control"
@@ -14,7 +20,8 @@
           placeholder="사용자 ID"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4 d-flex">
+        <i class="bi bi-person-fill p-2"></i>
         <input
           type="text"
           class="form-control"
@@ -24,7 +31,8 @@
           placeholder="실명"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4 d-flex">
+        <i class="bi bi-key p-2"></i>
         <input
           type="password"
           class="form-control"
@@ -34,7 +42,8 @@
           placeholder="비밀번호"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4 d-flex">
+        <i class="bi bi-key-fill p-2"></i>
         <input
           type="password"
           class="form-control"
@@ -44,7 +53,8 @@
           placeholder="비밀번호 확인"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4 d-flex">
+        <i class="bi bi-envelope p-2"></i>
         <input
           type="text"
           class="form-control"
@@ -54,7 +64,8 @@
           placeholder="이메일"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4 d-flex">
+        <i class="bi bi-telephone p-2"></i>
         <input
           type="text"
           class="form-control"
@@ -64,7 +75,8 @@
           placeholder="전화번호"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4 d-flex">
+        <i class="bi bi-house p-2"></i>
         <input
           type="text"
           class="form-control"
