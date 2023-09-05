@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import os
 import pymysql
+from io import StringIO
 
 RDS_HOST = os.getenv('RDS_HOST')
 RDS_PORT = 3306
@@ -20,15 +21,33 @@ conn = pymysql.connect(
 )
 
 # Redis 연결 설정
-r = redis.Redis(host='localhost', port=6379, db=0)
+try:
+    r = redis.Redis(host='localhost', port=6379, db=0, socket_timeout=100)
+    if r.ping() is False:
+        raise ConnectionError("Redis 서버에 연결할 수 없습니다.")
+except redis.ConnectionError as e:
+    print(f"Redis 연결 에러: {e}")
+    r = None
 
-def get_data(query):
-    cache_key = f"sql:{query}"  # 쿼리를 기반으로 캐시 키 생성
-    cached_data = r.get(cache_key)  # Redis에서 캐시 가져오기
+def get_data(query: str) -> pd.DataFrame:
+    cache_key = f"{query}"
 
-    if cached_data:
-        return pd.read_json(cached_data)  # 캐시된 데이터가 있으면 반환
-    else:
+    if r:
+        try:
+            cached_data = r.get(cache_key)
+            if cached_data:
+                return pd.read_json(StringIO(cached_data.decode('utf-8')))
+        except redis.ConnectionError as e:
+            print(f"Redis 연결 에러1: {e}")
+
+    try:
         data = pd.read_sql(query, conn)
-        r.setex(cache_key, 36000, data.to_json())  # 캐시에 데이터 저장, 만료시간 1시간(3600초)
+        if r:
+            try:
+                r.setex(cache_key, 36000, data.to_json())
+            except redis.ConnectionError as e:
+                print(f"Redis 연결 에러2: {e}")
         return data
+    except pymysql.MySQLError as e:
+        print(f"MySQL 에러: {e}")
+        return pd.DataFrame()

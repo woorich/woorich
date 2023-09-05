@@ -109,6 +109,41 @@
       </div>
     </div>
   </div>
+
+  <div class="sales-analysis">
+    <h1>매출분석</h1>
+    <div
+      class="p-3 m-3 border rounded"
+      style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+    >
+      <span>분석9: {{ dong }} 월 평균 매출 금액</span>
+      <h5 class="mt-2">{{ apart_text9 | safe }}</h5>
+    </div>
+    <div
+      class="p-3 m-3 border rounded"
+      style="font-size: larger; width: max-content"
+    >
+      <span>분석10: {{ dong }} 요일별 매출 비교 </span>
+      <div class="chart" id="bargraph10">
+        <script>
+          var graphs10 = {{plot10 | safe}};
+          Plotly.plot('bargraph10',graphs10,{});
+        </script>
+      </div>
+    </div>
+    <div
+      class="p-3 m-3 border rounded"
+      style="font-size: larger; width: max-content"
+    >
+      <span>분석11: {{ dong }} 업종별 매출 비율 </span>
+      <div class="chart" id="bargraph11">
+        <script>
+          var graphs11 = {{plot11 | safe}};
+          Plotly.plot('bargraph11',graphs11,{});
+        </script>
+      </div>
+    </div>
+  </div>
 </div>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 {% endblock %}

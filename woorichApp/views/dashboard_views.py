@@ -28,12 +28,17 @@ def report():
         avg_apartment_prices,
         visualize_avg_apt_prices,
         less_than_66,
-        visualize_less_than_66
+        visualize_less_than_66,
+        print_total_sales,
+        compare_sales_by_day,
+        show_sales_rate
     )
     dong_code = request.args.get('dong_code')
     dong = request.args.get('dong')
     gu = request.args.get('gu')
     job_code = request.args.get('job_code')
+    year = request.args.get('year')
+    quarter = request.args.get('quarter')
     
     text_result0 = zone_num(dong_code)
     text_result1 = by_loc(dong_code)
@@ -45,7 +50,10 @@ def report():
     bar6 = visualize_avg_apt_prices(dong_code)
     text_result7 = less_than_66(dong_code)
     bar8 = visualize_less_than_66(dong_code)
-    
+    text_result9 = print_total_sales(dong_code)
+    bar10 = compare_sales_by_day(dong_code, year, quarter)
+    bar11 = show_sales_rate(dong_code, year, quarter)
+
     return render_template(
         'dashboard/analysis-report.html',
         dong_code=dong_code,
@@ -60,6 +68,9 @@ def report():
         plot6=bar6,
         apart_text7=text_result7,
         plot8=bar8,
+        apart_text9=text_result9,
+        plot10 = bar10,
+        plot11 = bar11
     )
 
 
