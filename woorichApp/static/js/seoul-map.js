@@ -238,7 +238,7 @@ map.on('load', function() {
         'source': 'tileset_data',
         'source-layer': 'seoul_gu-3hhcst',
         'paint': {
-            'fill-color': 'hsla(335, 100%, 73%, 0.32)',
+            'fill-color': 'hsla(163, 87%, 61%, 0.59)',
             'fill-opacity': 0.75,
             'fill-outline-color': 'hsl(0, 100%, 100%)'
         }

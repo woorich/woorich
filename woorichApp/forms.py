@@ -19,7 +19,7 @@ class UserCreateForm(FlaskForm):
     address = StringField('주소', validators=[DataRequired()])
 
 class UserLoginForm(FlaskForm):
-    user_id = StringField('사용자이름', validators=[DataRequired(), Length(min=5, max=25)])
+    user_id = StringField('사용자이름', validators=[DataRequired(), Length(min=3, max=25)])
     user_pw = PasswordField('비밀번호', validators=[DataRequired()])
 
 class UserUpdateForm(FlaskForm):

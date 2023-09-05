@@ -1,79 +1,83 @@
 {% extends "layouts/base.html" %} {% block content %}
-<div class="container">
-  <h5 class="my-3 border-bottom pb-2">계정생성</h5>
-  <form method="post">
-    {{ form.csrf_token }} {% include "form_errors.html" %}
-    <div class="mb-3">
-      <label for="user_id">사용자 ID</label>
-      <input
-        type="text"
-        class="form-control"
-        name="user_id"
-        id="user_id"
-        value="{{ form.user_id.data or '' }}"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="username">실명</label>
-      <input
-        type="text"
-        class="form-control"
-        name="username"
-        id="username"
-        value="{{ form.username.data or '' }}"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="user_pw1">비밀번호</label>
-      <input
-        type="password"
-        class="form-control"
-        name="user_pw1"
-        id="user_pw1"
-        value="{{ form.user_pw1.data or '' }}"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="user_pw2">비밀번호 확인</label>
-      <input
-        type="password"
-        class="form-control"
-        name="user_pw2"
-        id="user_pw2"
-        value="{{ form.user_pw2.data or '' }}"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="email">이메일</label>
-      <input
-        type="text"
-        class="form-control"
-        name="email"
-        id="email"
-        value="{{ form.email.data or '' }}"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="email">전화번호</label>
-      <input
-        type="text"
-        class="form-control"
-        name="phone"
-        id="phone"
-        value="{{ form.phone.data or '' }}"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="email">주소</label>
-      <input
-        type="text"
-        class="form-control"
-        name="address"
-        id="address"
-        value="{{ form.address.data or '' }}"
-      />
-    </div>
-    <button type="submit" class="btn btn-primary">생성하기</button>
-  </form>
+<div class="container w-50 my-1 p-4" style="box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);">
+  <div class="my-1 w-50 mx-auto">
+    <h3 class="my-3 pb-2 text-secondary">계정생성</h3>
+    <form method="post">
+      {{ form.csrf_token }} {% include "form_errors.html" %}
+      <div class="mb-4">
+        <input
+          type="text"
+          class="form-control"
+          name="user_id"
+          id="user_id"
+          value="{{ form.user_id.data or '' }}"
+          placeholder="사용자 ID"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          class="form-control"
+          name="username"
+          id="username"
+          value="{{ form.username.data or '' }}"
+          placeholder="실명"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="password"
+          class="form-control"
+          name="user_pw1"
+          id="user_pw1"
+          value="{{ form.user_pw1.data or '' }}"
+          placeholder="비밀번호"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="password"
+          class="form-control"
+          name="user_pw2"
+          id="user_pw2"
+          value="{{ form.user_pw2.data or '' }}"
+          placeholder="비밀번호 확인"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          class="form-control"
+          name="email"
+          id="email"
+          value="{{ form.email.data or '' }}"
+          placeholder="이메일"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          class="form-control"
+          name="phone"
+          id="phone"
+          value="{{ form.phone.data or '' }}"
+          placeholder="전화번호"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          class="form-control"
+          name="address"
+          id="address"
+          value="{{ form.address.data or '' }}"
+          placeholder="주소"
+        />
+      </div>
+      <div class="w-100 d-flex">
+        <button type="submit" class="btn btn-secondary mx-auto">생성하기</button>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
