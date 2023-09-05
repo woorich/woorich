@@ -1,37 +1,3 @@
-# 방법1. Dash로 대시보드를 작성해서 Flask 서버와 연동
-# https://kibua20.tistory.com/212 
-# pip install dash 후
-# python dashboard_api.py 로 실행해보세요.
-
-# from dash import Dash, html, dcc, callback, Output, Input
-# import plotly.express as px
-# import pandas as pd
-
-# df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
-
-# app = Dash(__name__)
-
-# app.layout = html.Div([
-#     html.H1(children='Title of Dash App', style={'textAlign':'center'}),
-#     dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
-#     dcc.Graph(id='graph-content')
-# ])
-
-# @callback(
-#     Output('graph-content', 'figure'),
-#     Input('dropdown-selection', 'value')
-# )
-# def update_graph(value):
-#     dff = df[df.country==value]
-#     return px.line(dff, x='year', y='pop')
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
-
-# 방법 2. Plotly 함수를 직접 삽입
-# 참고: https://blog.heptanalytics.com/flask-plotly-dashboard/
-# https://github.com/yvonnegitau/flask-Dashboard
 import plotly
 import plotly.graph_objs as go
 import plotly.express as px
@@ -39,30 +5,12 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import json
-
-import pymysql
 import pandas as pd
-import os
+from woorichApp.dashboard.cache_utils import get_data
 
-RDS_HOST = os.getenv('RDS_HOST')
-RDS_PORT = 3306
-RDS_USERNAME = os.getenv('RDS_USERNAME')
-RDS_PASSWORD = os.getenv('RDS_PASSWORD')
-RDS_DB_NAME1 = os.getenv('RDS_DB_NAME1')
-
-
-conn = pymysql.connect(
-    host=RDS_HOST,     # MySQL Server Address
-    port=RDS_PORT,          # MySQL Server Port
-    user=RDS_USERNAME,      # MySQL username
-    passwd=RDS_PASSWORD,    # password for MySQL username
-    db=RDS_DB_NAME1,   # Database name
-    charset='utf8mb4'
-)
-
-df_apart = pd.read_sql("select * from df_apart",conn)
-df_store = pd.read_sql("select * from df_store",conn)
-df_facility = pd.read_sql("select * from df_facility",conn)
+df_apart = get_data("select * from df_apart")
+df_store = get_data("select * from df_store")
+df_facility = get_data("select * from df_facility")
 
 # 분석0: 행정동별 상권 개수
 def zone_num(dong_code):
@@ -75,10 +23,10 @@ def zone_num(dong_code):
 # 분석1: 행정동별 가장 점포수가 많은 업종
 def by_loc(dong_code):
     def service_max(i):
-       return i.value_counts().index[0]
+        return i.value_counts().index[0]
     df_temp = df_store[df_store['행정동_코드']==int(dong_code)]
-    a = df_temp.groupby('행정동명').agg({'점포_수' : 'max', '서비스_업종_코드_명_x': service_max}).reset_index()
-    return f"{a['행정동명'].iloc[0]}의 가장 많은 업종은 {a['서비스_업종_코드_명_x'].iloc[0]}이며 총 {a['점포_수'].iloc[0]}개의 점포가 있습니다"
+    a = df_temp.groupby('행정동명').agg({'점포_수' : 'max', '서비스_업종_코드_명': service_max}).reset_index()
+    return print(f"{a['행정동명'].iloc[0]}의 가장 많은 업종은 {a['서비스_업종_코드_명'].iloc[0]}이며 총 {a['점포_수'].iloc[0]}개의 점포가 있습니다")
 
 
 # 분석2: 행정동 내 업종 대분류별 업소 수
@@ -112,26 +60,23 @@ def store_num(dong_code):
 
 # 분석3: 업종별 업소 수 3년 추이
 def store_num_trend(dong_code, job_code):
-    df_filtered= df_store[(df_store['행정동_코드']==int(dong_code)) & (df_store['업종_대분류'] == job_code)]
-    df = df_filtered.groupby(['기준_년_코드', '기준_분기_코드'])[['점포_수']].sum()
-    if df.empty:
-        return "데이터가 없습니다."
-    
-    x=list(range(12))
+   df_filtered= df_store[(df_store['행정동_코드']==int(dong_code)) & (df_store['업종_대분류'] == job_code)]
+   df = df_filtered.groupby(['기준_년_코드', '기준_분기_코드'])[['점포_수']].sum()
+   x=list(range(24))
 
-    for i in range(12):
-        x[i]=(f'202{i//4}'+'_'+f'{(i%4)+1}')
-    colors = ['점포 수']
-    for template in ["simple_white"]:
-        fig = px.line(df, x=x, y='점포_수',
-              labels={'기준_분기_코드': '분기', '점포_수': '점포 수'},
-              title='분기별 업소 수 추이',
-              template=template)
-    fig.update_xaxes(title_text='시기')
-    fig.update_traces(line_width=4,line_dash='dash',line_color='rgb(128,177,211)')
+   for i in range(24):
+      x[i]=(f'202{i//4}'+'_'+f'{(i%4)+1}')
+   colors = ['점포 수']
+   for template in ["simple_white"]:
+      fig = px.line(df, x=x, y='점포_수',
+                    labels={'기준_분기_코드': '분기', '점포_수': '점포 수'},
+                    title='분기별 업소 수 추이',
+                    template=template)
+   fig.update_xaxes(title_text='시기')
+   fig.update_traces(line_width=4,line_dash='dash',line_color='rgb(128,177,211)')
     # fig.show()
-    graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+   graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+   return graphJSON
 
 # 분석4: 주요 시설 현황
 def facility_num(dong_code):

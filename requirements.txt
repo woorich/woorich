@@ -25,3 +25,4 @@ typing_extensions==4.7.1
 Werkzeug==2.3.7
 WTForms==3.0.1
 watchdog
+redis==4.1.0
