@@ -223,15 +223,15 @@ map.on('load', function() {
         "url": "mapbox://wooyoonwinnie.aahbjlxw",
         "type": "vector"
     });
-    map.addLayer({
-        'id': 'background',
-        'type': 'background',
-        'source': 'tileset_data',
-        'source-layer': 'seoul_gu-3hhcst',
-        'paint' : {
-            'background-color': 'hsla(0, 0%, 100%, 0.8)'
-        }
-    });
+    // map.addLayer({
+    //     'id': 'background',
+    //     'type': 'background',
+    //     'source': 'tileset_data',
+    //     'source-layer': 'seoul_gu-3hhcst',
+    //     'paint' : {
+    //         'background-color': 'hsla(0, 0%, 100%, 0.8)'
+    //     }
+    // });
     map.addLayer({
         'id': 'fill',
         'type': 'fill',
