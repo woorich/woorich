@@ -1,10 +1,8 @@
 {% extends 'layouts/base.html' %} {% block content %}
-<h3 class="text-secondary px-5">게시판</h3>
 <div class="container my-2">
-  <div class="text-end pb-3">
-    <a href="{{ url_for('board.create') }}" class="btn btn-info text-white"
-      >글 작성하기</a
-    >
+  <div class="d-flex justify-content-between py-3">
+    <h3 class="text-secondary">게시판</h3>
+    <a href="{{ url_for('board.create') }}" class="btn btn-info text-white mt-3">글 작성하기</a>
     <!-- 라우트명 변경 -->
   </div>
   <table class="table">
@@ -19,7 +17,7 @@
     </thead>
     <tbody>
       {% if board_list %} {% for board in board_list.items %}
-      <tr class="text-center">
+      <tr class="text-center post">
         <td>
           {{ board_list.total - ((board_list.page-1) * board_list.per_page) -
           loop.index0 }}

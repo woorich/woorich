@@ -1,12 +1,10 @@
 {% extends "layouts/base.html" %} {% block content %}
-<div class="container">
-  <div>
-    <h5 class="my-3 pb-2">로그인</h5>
-  </div>
-  <div>
+<div class="container w-50 mt-5 p-5" style="box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);">
+  <div class="my-2 w-50 mx-auto">
+    <h3 class="my-3 pb-2 text-secondary">로그인</h3>
     <form method="post">
       {{ form.csrf_token }} {% include "form_errors.html" %}
-      <div class="mb-3">
+      <div class="mb-4">
         <label for="user_id">사용자 ID</label>
         <input
           type="text"
@@ -16,7 +14,7 @@
           value="{{ form.user_id.data or '' }}"
         />
       </div>
-      <div class="mb-3">
+      <div class="my-3">
         <label for="user_pw">비밀번호</label>
         <input
           type="password"
@@ -26,7 +24,9 @@
           value="{{ form.user_pw.data or '' }}"
         />
       </div>
-      <button type="submit" class="btn btn-primary">로그인</button>
+      <div class="w-100 d-flex">
+        <button type="submit" class="btn btn-secondary mx-auto mt-5">로그인</button>
+      </div>
     </form>
   </div>
 </div>

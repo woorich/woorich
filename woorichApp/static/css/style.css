@@ -14,7 +14,7 @@ a {
   color: black;
 }
 
-.nav-btn::before {
+.nav-link:before {
   content: '';
   position: absolute;
   bottom: 0%;
@@ -33,7 +33,7 @@ a {
   transition: transform 0.4s cubic-bezier(1, 0, 0, 1)
 }
 
-.nav-btn:hover::before {
+.nav-link:hover:before {
   -webkit-transform-origin: left top;
   -ms-transform-origin: left top;
   transform-origin: left top;
