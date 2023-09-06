@@ -33,7 +33,7 @@ def update_user_info(user_id):
         form = UserUpdateForm(obj=user)
     return render_template('mypage/mypage.html', user=user, form=form)
 
-@bp.route('/scrap_list', methods=['GET','POST'])
-def scrap_list():
+@bp.route('/scrap_list/<user_id>', methods=['GET','POST'])
+def scrap_list(user_id):
     user = g.user
     return render_template('mypage/scrap_list.html', user=user)

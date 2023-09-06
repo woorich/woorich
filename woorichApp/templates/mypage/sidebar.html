@@ -1,0 +1,58 @@
+<style>
+  .left-section {
+    height: 100vh; /* 사이드바 길이를 늘림 */
+  }
+  .left-section h3 {
+    font-size: 2.5em; /* 사용자명 글씨 크기 */
+    margin-bottom: 100px; /* h3와 ul 사이의 간격을 조정 */
+  }
+  .left-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .left-section ul li {
+    font-size: 1.5em; /* 목록 글씨 크기 */
+    margin-bottom: 50px; /* 목록 사이의 간격 */
+  }
+  .selected{
+    color: blue;
+  }
+</style>
+
+<div class="left-section col-2 p-4 mb-3 text-secondary shadow text-center">
+    <div class="mb-5 p-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+      </svg>
+      <h4 class="mt-3 mb-5">{{ user.username }} 님</h4>
+    </div>
+    <div class="mb-5 p-3">
+      <ul style="font-family: 'Noto Sans KR', sans-serif;">
+        <li><a href="{{ url_for('mypage.scrap_list', user_id=user.user_id )}}" class="menu-item" id="scrap_list">스크랩 목록</a></li>
+        <li><a href="{{ url_for('mypage.update_user_info', user_id=user.user_id) }}" class="menu-item" id="account_settings">계정 설정</a></li>
+      </ul>
+    </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  // Get all menu items
+  const menuItems = document.querySelectorAll('.menu-item');
+
+  // Function to handle click events
+  function handleClick(event) {
+    // Remove 'selected' class from all items
+    menuItems.forEach(item => {
+      item.classList.remove('selected');
+    });
+
+    // Add 'selected' class to the clicked item
+    event.currentTarget.classList.add('selected');
+  }
+
+  // Add click event listeners to all menu items
+  menuItems.forEach(item => {
+    item.addEventListener('click', handleClick);
+  });
+});
+</script>
