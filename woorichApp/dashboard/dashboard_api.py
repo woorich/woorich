@@ -7,17 +7,17 @@ import numpy as np
 import json
 from woorichApp.dashboard.cache_utils import get_data
 
-df_apart = get_data("select * from df_apart")
-df_store = get_data("select * from df_store")
-df_facility = get_data("select * from df_facility")
-df_map_info = get_data("select * from df_map_info")
+df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")
+df_facility = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 관공서_수, 은행_수, 종합병원_수, 일반_병원_수, 약국_수, 유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 대학교_수, 백화점_수, 슈퍼마켓_수, 극장_수, 숙박_시설_수, 공항_수, 철도_역_수, 버스_터미널_수, 지하철_역_수, 버스_정거장_수 from df_facility")
+df_apart = get_data("select dong_code, year, quarter, avg_price, `~1`, `1~2`, `2~3`, `3~4`, `4~5`, `5~6`, `6~`, `~66sm`, `66~99sm`, `99~132sm`, `132~165sm`, `165sm~` from df_apart")
+df_map_info = get_data("select 행정동_코드, 행정동명, 엑스좌표_값, 와이좌표_값, 상권_코드, 상권_구분_코드_명, 상권_코드_명 from df_map_info")
+df_rs_population = get_data("select 행정동_코드, 기준_년_코드, 기준_분기_코드, `총 상주인구 수`, `총 가구 수`, `남성연령대 10 상주인구 수`, `남성연령대 20 상주인구 수`, `남성연령대 30 상주인구 수`, `남성연령대 40 상주인구 수`, `남성연령대 50 상주인구 수`, `남성연령대 60 이상 상주인구 수`, `여성연령대 10 상주인구 수`, `여성연령대 20 상주인구 수`, `여성연령대 30 상주인구 수`, `여성연령대 40 상주인구 수`, `여성연령대 50 상주인구 수`, `여성연령대 60 이상 상주인구 수`, 행정동명 from df_rs_population")
+df_rs_income = get_data("select 행정동_코드, 시군구_코드, 행정동명, 시군구명, 월_평균_소득_금액 from df_rs_income")
+df_lifepop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 총_생활인구_수, 상권_코드, 상권_코드_명, 남성_생활인구_수, 여성_생활인구_수, 총_생활인구_수, 연령대_10_생활인구_수, 연령대_20_생활인구_수, 연령대_30_생활인구_수, 연령대_40_생활인구_수, 연령대_50_생활인구_수, 연령대_60_이상_생활인구_수, 시간대_1_생활인구_수, 시간대_2_생활인구_수, 시간대_3_생활인구_수, 시간대_4_생활인구_수, 시간대_5_생활인구_수, 시간대_6_생활인구_수, 월요일_생활인구_수, 화요일_생활인구_수, 수요일_생활인구_수, 목요일_생활인구_수, 금요일_생활인구_수, 토요일_생활인구_수, 일요일_생활인구_수 from df_lifepop")
 df_sales = get_data("select * from df_sales")
-df_total_sales = get_data("select * from df_total_sales")
+df_total_sales = get_data("select 지출_총금액, 행정동_코드 from df_total_sales")
 df_income_consume = get_data("select * from df_income_consume")
-df_rs_population = get_data("select * from df_rs_population")
-df_rs_income = get_data("select * from df_rs_income")
-df_lifepop = get_data("select * from df_lifepop")
-df_workpop = get_data("select * from df_workpop")
+df_workpop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 총_직장인구_수, 상권_코드, 상권_코드_명 from df_workpop")
 
 # 환경분석
 # 분석0: 행정동별 상권 개수
@@ -25,7 +25,7 @@ def zone_num(dong_code):
    df_zone = df_store[df_store['행정동_코드']==int(dong_code)]
    a = df_zone[('상권_코드')].nunique()
    b = df_zone[('상권_코드_명')].unique()
-   return f"해당 행정동에는 총 {a}개의 상권이 있습니다. 목록: {b}"
+   return [a, b]
 
 
 # 분석1: 행정동별 가장 점포수가 많은 업종
@@ -34,7 +34,7 @@ def by_loc(dong_code):
         return i.value_counts().index[0]
     df_temp = df_store[df_store['행정동_코드']==int(dong_code)]
     a = df_temp.groupby('행정동명').agg({'점포_수' : 'max', '서비스_업종_코드_명': service_max}).reset_index()
-    return f"{a['행정동명'].iloc[0]}의 가장 많은 업종은 {a['서비스_업종_코드_명'].iloc[0]}이며 총 {a['점포_수'].iloc[0]}개의 점포가 있습니다"
+    return {"업종명" : a['서비스_업종_코드_명'].iloc[0], "최대업종점포수" : a['점포_수'].iloc[0]}
 
 
 # 분석2: 행정동 내 업종 대분류별 업소 수
@@ -342,7 +342,7 @@ def total_rspop(dong_code):
     (df_rs_population['기준_년_코드'] == 2022) &
     (df_rs_population['기준_분기_코드'] == 4)
     ]
-
+    print(df_rs_population['행정동_코드'].dtype)
     #입력한 것과 일치하는 데이터가 없으면
     if filtered_df.empty:
         print("분석 12: 데이터가 존재하지 않습니다.")
@@ -634,8 +634,6 @@ def get_genlifepop_info(year, quarter, dong_code):
     male_ratio = male_lifepop / total_lifepop
     female_ratio = female_lifepop / total_lifepop
 
-    # 백분율로 표시할 때 소수점 둘째 자리까지 나타냄
-    print(f"해당 행정동의 성비\n남성 비율: {male_ratio:.2%}, 여성 비율: {female_ratio:.2%}")
 
     # 2. '남성_생활인구_수'의 해당 행 값에서 '여성_생활인구_수'의 해당 행 값을 뺐을 때,
     # 값이 음수가 나오면 '여성'을 출력하고 양수가 나오면 '남성'을 출력
@@ -744,7 +742,8 @@ def get_lifepop_day(year, quarter, dong_code):
         '목요일_생활인구_수': '목요일',
         '금요일_생활인구_수': '금요일',
         '토요일_생활인구_수': '토요일',
-    '일요일_생활인구_수':'일요일'}, inplace=True)
+        '일요일_생활인구_수':'일요일'}, inplace=True)
+    
     # 조건에 맞는 데이터 필터링
     filtered_df = df_lifepop[(df_lifepop['기준_년_코드'] == year) & (df_lifepop['기준_분기_코드'] == quarter) & (df_lifepop['행정동_코드'] == int(dong_code))]
 
@@ -792,7 +791,7 @@ def get_lifepop_day(year, quarter, dong_code):
     # 각 요일별 생활인구 수 막대 그래프 그리기
     day_labels = ['월', '화', '수', '목', '금', '토', '일']
     fig_bar = px.bar(x=day_labels, y=total_per_day, labels={'x': '요일', 'y': '생활인구 수'}, title='각 요일별 생활인구 수')
-    # fig_bar.show() 각 요일별 생활인구수
+    fig_bar.show()
 
     # 행정동의 요일 비율 파이 차트 그리기
     ratios = [mon_ratio, tue_ratio, wed_ratio, thu_ratio, fri_ratio, sat_ratio, sun_ratio]
@@ -824,38 +823,44 @@ def get_lifepop_recent(dong_code):
 def get_lifepop_line(dong_code):
     year_quarter = []
     list_num = []
-    for year in  range(2017,2023):
+
+    for year in range(2017, 2023):
         for quarter in range(1, 5):
             filtered_df = df_lifepop[
-            (df_lifepop['행정동_코드'] == int(dong_code)) &
-            (df_lifepop['기준_년_코드'] == year) &
-            (df_lifepop['기준_분기_코드'] == quarter)]
+                (df_lifepop['행정동_코드'] == int(dong_code)) &
+                (df_lifepop['기준_년_코드'] == year) &
+                (df_lifepop['기준_분기_코드'] == quarter)]
 
-            #입력한 것과 일치하는 데이터가 없으면
-            if filtered_df.empty:
-                print("분석 24: 데이터가 존재하지 않습니다.")
-                return None
+            if not filtered_df.empty:
+                # 입력된 행정동코드로 행정동명 도출하기
+                dong_name = df_lifepop[(df_lifepop['행정동_코드'] == int(dong_code))]['행정동명'].iloc[0]
 
-            # 입력된 행정동코드로 행정동명 도출하기
-            dong_name = df_lifepop[(df_lifepop['행정동_코드']==int(dong_code))]['행정동명'].iloc[0]
+                # filtered_df에서 총 생활인구 수 총합 구하기
+                lifepop_value = filtered_df['총_생활인구_수'].sum().iloc[0]
+                list_num.append(int(lifepop_value))  # 숫자로 변환
+            else:
+                lifepop_value = 0  # or some default value
+                list_num.append(lifepop_value)  # add default value to list
 
-            # filtered_df에서 총 생활인구 수 총합 구하기
-            lifepop_value = filtered_df['총_생활인구_수'].sum()
-            list_num.append(lifepop_value)
-            year_quarter.append(f'{str(year), str(quarter)}')
+            year_quarter.append(f"{year}_{quarter}")
+
+    if not list_num:
+        print("분석 24: 데이터가 존재하지 않습니다.")
+        return None
 
     # 그래프 x축, y축, title, label 지정
     fig = px.line(x=year_quarter, y=list_num,
-                title=f"{dong_name}의 총 생활인구 수 변화",color_discrete_sequence=['black'],markers=True)
+                  title=f"{dong_name}의 총 생활인구 수 변화", color_discrete_sequence=['black'], markers=True)
 
     # 그래프 커스터 마이징
     fig.update_layout(
         xaxis_title="분기",
         yaxis_title="총 생활인구 수 변화"
-        )
+    )
     # 꺾은선 그래프 출력
-    graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
+
 
 # 직장인구
 # 분석 25: 직장인구 수, 가장 많은 상위 3개 상권
