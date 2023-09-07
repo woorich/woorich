@@ -7,17 +7,19 @@ import numpy as np
 import json
 from woorichApp.dashboard.cache_utils import get_data
 
-df_apart = get_data("select * from df_apart")
-df_store = get_data("select * from df_store")
-df_facility = get_data("select * from df_facility")
-df_map_info = get_data("select * from df_map_info")
+df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")
+df_facility = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 관공서_수, 은행_수, 종합병원_수, 일반_병원_수, 약국_수, 유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 대학교_수, 백화점_수, 슈퍼마켓_수, 극장_수, 숙박_시설_수, 공항_수, 철도_역_수, 버스_터미널_수, 지하철_역_수, 버스_정거장_수 from df_facility")
+df_apart = get_data("select dong_code, year, quarter, avg_price, `~1`, `1~2`, `2~3`, `3~4`, `4~5`, `5~6`, `6~`, `~66sm`, `66~99sm`, `99~132sm`, `132~165sm`, `165sm~` from df_apart")
+df_map_info = get_data("select 행정동_코드, 행정동명, 엑스좌표_값, 와이좌표_값, 상권_코드, 상권_구분_코드_명, 상권_코드_명 from df_map_info")
+df_rs_population = get_data("select 행정동_코드, 기준_년_코드, 기준_분기_코드, `총 상주인구 수`, 행정동_코드, 행정동명 from df_rs_population")
+df_rs_income = get_data("select 행정동_코드, 시군구_코드, 행정동명, 시군구명, 월_평균_소득_금액 from df_rs_income")
+df_lifepop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 총_생활인구_수, 상권_코드, 상권_코드_명, 남성_생활인구_수, 여성_생활인구_수, 총_생활인구_수, 연령대_10_생활인구_수, 연령대_20_생활인구_수, 연령대_30_생활인구_수, 연령대_40_생활인구_수, 연령대_50_생활인구_수, 연령대_60_이상_생활인구_수, 시간대_1_생활인구_수, 시간대_2_생활인구_수, 시간대_3_생활인구_수, 시간대_4_생활인구_수, 시간대_5_생활인구_수, 시간대_6_생활인구_수, 월요일_생활인구_수, 화요일_생활인구_수, 수요일_생활인구_수, 목요일_생활인구_수, 금요일_생활인구_수, 토요일_생활인구_수, 일요일_생활인구_수 from df_lifepop")
 df_sales = get_data("select * from df_sales")
-df_total_sales = get_data("select * from df_total_sales")
+df_total_sales = get_data("select 지출_총금액, 행정동_코드 from df_total_sales")
 df_income_consume = get_data("select * from df_income_consume")
-df_rs_population = get_data("select * from df_rs_population")
-df_rs_income = get_data("select * from df_rs_income")
-df_lifepop = get_data("select * from df_lifepop")
-df_workpop = get_data("select * from df_workpop")
+df_workpop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 총_직장인구_수, 상권_코드, 상권_코드_명 from df_workpop")
+
+print(df_rs_population, df_rs_population.info())
 
 # 환경분석
 # 분석0: 행정동별 상권 개수
@@ -190,12 +192,9 @@ def less_than_66(dong_code):
     if dong_row_2022.empty:
         print("분석7: 2022년 데이터가 존재하지 않습니다.")
         return None
-    
-    print("dong_row_2022: ", dong_row_2022)
 
     # 2022년 전체 아파트 수 계산
     total_apartments = dong_row_2022[['~66sm', '66~99sm', '99~132sm', '132~165sm', '165sm~']].sum(axis=1)
-    print("total_apartments: ", total_apartments)
 
     # 데이터가 없거나 전체 합계가 0인 경우 체크
     if total_apartments.sum() == 0:
@@ -204,7 +203,6 @@ def less_than_66(dong_code):
 
     # 2022년 66m² 미만 아파트 수 계산
     apartment_less_than_66 = dong_row_2022['~66sm'].sum()
-    print("apartment_less_than_66: ", apartment_less_than_66)
 
     # 비율 계산
     less_than_ratio = apartment_less_than_66 / total_apartments.sum()
@@ -342,7 +340,7 @@ def total_rspop(dong_code):
     (df_rs_population['기준_년_코드'] == 2022) &
     (df_rs_population['기준_분기_코드'] == 4)
     ]
-
+    print(df_rs_population['행정동_코드'].dtype)
     #입력한 것과 일치하는 데이터가 없으면
     if filtered_df.empty:
         print("분석 12: 데이터가 존재하지 않습니다.")
@@ -744,7 +742,8 @@ def get_lifepop_day(year, quarter, dong_code):
         '목요일_생활인구_수': '목요일',
         '금요일_생활인구_수': '금요일',
         '토요일_생활인구_수': '토요일',
-    '일요일_생활인구_수':'일요일'}, inplace=True)
+        '일요일_생활인구_수':'일요일'}, inplace=True)
+    
     # 조건에 맞는 데이터 필터링
     filtered_df = df_lifepop[(df_lifepop['기준_년_코드'] == year) & (df_lifepop['기준_분기_코드'] == quarter) & (df_lifepop['행정동_코드'] == int(dong_code))]
 
