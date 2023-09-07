@@ -68,11 +68,6 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
                 
             });
         })
-
-        // map 의 focusing 변경 + 색 강조 + map의 해당 구역은 popup 띄우기 
-        var urlString = location.href;
-
-
     });
 })
 .catch(error => console.error('Error:', error));
@@ -154,7 +149,7 @@ fetch(staticUrl+'/data/gu-geo.json')
                 .setHTML(`
                     <div class="container d-flex flex-column align-baseline px-2 rounded" id="${dong_name}">
                         <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
-                        <a href='/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong_name}' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
+                        <a href='/dashboard/report/${dong_code}/${gu}/${dong_name}/2018/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
                         <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
                     </div>
                 `)

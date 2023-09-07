@@ -4,36 +4,202 @@
 
 
 <div class="container-fluid w-75">
-  <a
-  class="btn btn-outline-primary my-3"
-  role="button"
-  href="{{ url_for('dashboard.index') }}"
-  >다시 검색하기</a>
-  <h1 class="mt-3 mb-5">{{ gu }} {{ dong }} {{ dong_code }}</h1>
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('dashboard.report', dong_code=dong_code, dong=dong, gu=gu) }}">분석 요약</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('dashboard.report_environment', dong_code=dong_code, dong=dong, gu=gu) }}">환경 분석</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('dashboard.report_sales', dong_code=dong_code, dong=dong, gu=gu) }}">매출 분석</a>
-    </li><li class="nav-item">
-      <a class="nav-link active" href="{{ url_for('dashboard.report_population', dong_code=dong_code, dong=dong, gu=gu) }}"  tabindex="-1" aria-current="true">인구 분석</a>
-    </li>
-  </ul>
+  {% include "dashboard/navbar.html" %}
   <div>
-    <div
-      class="p-3 m-3 border rounded"
-      style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
-    >
-      <span
-        >분석5: 해당 동의 가장 최근(2022) 아파트 평균 가격 및 6억 이상 아파트
-        비율</span
+    <div class="resident-analysis">
+      <h1>주거인구 분석</h1>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
       >
-      <h5 class="mt-2">{{ apart_text }}</h5>
+        <span>분석12: {{ dong }} 주거인구 수</span>
+        <h5 class="mt-2">{{ apart_text12 | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>분석13: {{ dong }} 주거인구 수 변화 추이 </span>
+        <div class="chart" id="bargraph13">
+          <script>
+            var graphs13 = {{plot13 | safe}};
+            Plotly.plot('bargraph13',graphs13,{});
+          </script>
+        </div>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석14: {{ dong }} 성별, 연령대별 1위</span>
+        <h5 class="mt-2">{{ apart_text14 | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석15: {{ dong }} 총 가구세대 수</span>
+        <h5 class="mt-2">{{ apart_text15 | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>분석16: {{ dong }} 가구세대 수 추이 </span>
+        <div class="chart" id="bargraph16">
+          <script>
+            var graphs16 = {{plot16 | safe}};
+            Plotly.plot('bargraph16',graphs16,{});
+          </script>
+        </div>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석17: {{ dong }} 평균 소득구간</span>
+        <h5 class="mt-2">{{ text_plot17[0] | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>{{ dong }} 평균 소득구간 추이 </span>
+        <div class="chart" id="bargraph17">
+          <script>
+            var graphs17 = {{text_plot17[1] | safe}};
+            Plotly.plot('bargraph17',graphs17,{});
+          </script>
+        </div>
+      </div>
     </div>
+  
+    <div class="env-analysis">
+      <h1>생활인구 분석</h1>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>분석18: {{ dong }} 생활인구 가장 많은 상권 3곳 </span>
+        <div class="chart" id="bargraph18">
+          <script>
+            var graphs18 = {{plot18 | safe}};
+            Plotly.plot('bargraph18',graphs18,{});
+          </script>
+        </div>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석19: {{ dong }} 더 많은 성별</span>
+        <h5 class="mt-2">{{ text_text_plot19[0] | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석19: {{ dong }} 성별비</span>
+        <h5 class="mt-2">{{ text_text_plot19[1] | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>{{ dong }} 성별비 차트 </span>
+        <div class="chart" id="bargraph19">
+          <script>
+            var graphs19 = {{text_text_plot19[2] | safe}};
+            Plotly.plot('bargraph19',graphs19,{});
+          </script>
+        </div>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석20: {{ dong }} 가장 많은 연령대</span>
+        <h5 class="mt-2">{{ text_plot20[0] | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>{{ dong }} 연령대 비율 </span>
+        <div class="chart" id="bargraph20">
+          <script>
+            var graphs20 = {{text_plot20[1] | safe}};
+            Plotly.plot('bargraph20',graphs20,{});
+          </script>
+        </div>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석21: {{ dong }} 생활인구 가장 많은 시간대</span>
+        <h5 class="mt-2">{{ text_plot21[0] | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>{{ dong }} 시간대별 인구 </span>
+        <div class="chart" id="bargraph21">
+          <script>
+            var graphs21 = {{text_plot21[1] | safe}};
+            Plotly.plot('bargraph21',graphs21,{});
+          </script>
+        </div>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석22: {{ dong }} 요일별 총 생활인구 수</span>
+        <h5 class="mt-2">{{ text_text_plot22[0] | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>{{ dong }} 최다 생활인구 요일</span>
+        <h5 class="mt-2">{{ text_text_plot22[1] | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>{{ dong }} 요일별 생활인구 수 </span>
+        <div class="chart" id="bargraph22">
+          <script>
+            var graphs22 = {{text_text_plot22[2] | safe}};
+            Plotly.plot('bargraph22',graphs22,{});
+          </script>
+        </div>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+      >
+        <span>분석23: {{ dong }} 2022년도 4분기 총 생활인구 수</span>
+        <h5 class="mt-2">{{ aprt_text23 | safe }}</h5>
+      </div>
+      <div
+        class="p-3 m-3 border rounded"
+        style="font-size: larger; width: max-content"
+      >
+        <span>분석24: {{ dong }} 생활인구 수 변화 추이 </span>
+        <div class="chart" id="bargraph24">
+          <script>
+            var graphs24 = {{plot24 | safe}};
+            Plotly.plot('bargraph24',graphs24,{});
+          </script>
+        </div>
+      </div>
+    </div>
+  
+    <div class="worker-analysis">
 </div>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 {% endblock %}
