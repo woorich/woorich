@@ -256,7 +256,7 @@ def print_total_sales(dong_code):
     dong_consume_avg = df_dong_income_consume['지출_총금액'].sum()/df_dong_income_consume['지출_총금액'].count()
     dong_sales_avg = df_dong_total_sales['지출_총금액'].sum()/df_dong_total_sales['지출_총금액'].count()
     seoul_sales_avg = df_total_sales['지출_총금액'].sum()/df_total_sales['지출_총금액'].count() # 계산 전 가상의 값, 전체 데이터셋의 지출에 null값이 있다고 해서 계산 못 한 상태
-    return f"월 평균 지출 금액은 {dong_consume_avg:,.2f}원 입니다. 서울시 평균은 {seoul_sales_avg:,.2f}원 입니다."
+    return {"월 평균 지출": dong_consume_avg, "서울시 평균 지출": seoul_sales_avg}
 
 
 # 분석 10: 요일별 매출 비교
@@ -264,24 +264,19 @@ def compare_sales_by_day(dong_code, year, quarter):
     dong_info = df_map_info.loc[(df_map_info['행정동_코드']==dong_code)].drop(columns=['엑스좌표_값', '와이좌표_값'])
     df_dong_sales = pd.merge(left=dong_info, right=df_sales, how='left', \
                              on=['상권_코드', '상권_구분_코드_명', '상권_코드_명'], sort=False)
-    df_dong_sales_code = df_dong_sales.loc[(df_dong_sales['행정동_코드']==dong_code)]
-
     # 시간 조건1 정의
     cond1 = (df_dong_sales['기준_년_코드']==year)
-
     # 시간 조건2 정의
     cond2 = (df_dong_sales['기준_분기_코드']==quarter)
 
     df_dong_sales_set_time = df_dong_sales[cond1 & cond2]
-
     df_result = pd.DataFrame({})
 
     for code in dong_info['상권_코드']:
         df = df_dong_sales_set_time.loc[df_dong_sales_set_time['상권_코드']==code]
 
         if df.empty:
-            print("분석10: df 데이터가 존재하지 않습니다.")
-            return None
+            return "분석10: df 데이터가 존재하지 않습니다."
         
         df_top = df.sort_values(by=['분기당_매출_금액'], axis=0).iloc[0]
         df_top = pd.DataFrame(df_top).T
@@ -306,8 +301,6 @@ def compare_sales_by_day(dong_code, year, quarter):
 # 분석 11: 업종별 매출 비율
 def show_sales_rate(dong_code,year,quarter):
     dong_info = df_map_info.loc[(df_map_info['행정동_코드']==int(dong_code))].drop(columns=['엑스좌표_값', '와이좌표_값'])
-    df_dong_sales = pd.merge(left=dong_info, right=df_sales, how='left', \
-                             on=['상권_코드', '상권_구분_코드_명', '상권_코드_명'], sort=False)
     df_dong_income_consume = pd.merge(left=dong_info, right=df_income_consume, how='left', \
                                       on=['상권_코드', '상권_구분_코드_명', '상권_코드_명'], sort=False)
     # 시간 조건1 정의
@@ -323,12 +316,10 @@ def show_sales_rate(dong_code,year,quarter):
 
     # df_dong_income_consume이 비어 있지 않을 경우
     if df_dong_income_consume.empty:
-        print("분석 11: 데이터가 존재하지 않습니다.")
-        return None
+        return "분석 11: 데이터가 존재하지 않습니다."
 
     pie_chart_title = f"{df_dong_income_consume['행정동명'].iloc[0]} 의 분류별 지출 총금액 비율"
     fig = px.pie(values = ratio, names=labels, title=pie_chart_title)
-    fig = px.pie(title=pie_chart_title)
 
     graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
@@ -602,7 +593,7 @@ def get_lifepop_info(year, quarter, dong_code):
         name = row['상권_코드_명']
         lifepop = row['총_생활인구_수']
         print(f"상권 코드: {code}, 상권명: {name}, 생활인구 수: {lifepop}명")
-# 그래프 색상 설정
+    # 그래프 색상 설정
     colors = ['행정동평균', '행정구평균', '서울시평균']
     for template in ["simple_white"]:
     # plotly를 사용하여 막대 그래프 생성
