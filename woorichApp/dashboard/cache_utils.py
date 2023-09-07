@@ -3,7 +3,8 @@ import pandas as pd
 import json
 import os
 import pymysql
-from io import StringIO
+# from io import StringIO
+import pickle
 
 RDS_HOST = os.getenv('RDS_HOST')
 RDS_PORT = 3306
@@ -36,7 +37,8 @@ def get_data(query: str) -> pd.DataFrame:
         try:
             cached_data = r.get(cache_key)
             if cached_data:
-                return pd.read_json(StringIO(cached_data.decode('utf-8')))
+                # return pd.read_json(StringIO(cached_data.decode('utf-8')))
+                return pickle.loads(r.get(cache_key))
         except redis.ConnectionError as e:
             print(f"Redis 연결 에러1: {e}")
 
@@ -44,7 +46,8 @@ def get_data(query: str) -> pd.DataFrame:
         data = pd.read_sql(query, conn)
         if r:
             try:
-                r.setex(cache_key, 36000, data.to_json())
+                # r.setex(cache_key, 36000, data.to_json())
+                r.set(cache_key, pickle.dumps(data))
             except redis.ConnectionError as e:
                 print(f"Redis 연결 에러2: {e}")
         return data
