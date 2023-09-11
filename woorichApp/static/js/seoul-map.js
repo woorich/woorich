@@ -1,5 +1,7 @@
 const selectElementGu = document.getElementById('dynamic-select-gu');
 const selectElementDong = document.getElementById('dynamic-select-dong');
+const selectElementYear = document.getElementById('dynamic-select-year');
+const selectElementQuarter = document.getElementById('dynamic-select-quarter');
 let csvArray;
 const markers = [];
 //const staticUrl = document.currentScript.getAttribute('staticUrl');
@@ -74,29 +76,6 @@ fetch(staticUrl + '/data/gu-dong-coord-data.csv', {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-let geojsonGuData = {
-    "Gangnam-gu": { "Latitude": 37.49601, "Longitude": 127.06341, "Zoom Ratio": 11.87 },
-    "Gangdong-gu": { "Latitude": 37.54623, "Longitude": 127.14766, "Zoom Ratio": 12.24 },
-    "Gangbuk-gu": { "Latitude": 37.6471, "Longitude": 127.02109, "Zoom Ratio": 12.05 },
-};
-
-let convertedGeoJsonData = {
-    type: 'FeatureCollection',
-    features: Object.keys(geojsonGuData).map(key => ({
-        type: 'Feature',
-        properties: { 
-            description: key,
-            zoom_ratio: geojsonGuData[key]["Zoom Ratio"]
-        },
-        geometry: {
-            type: 'Point',
-            coordinates: [
-                geojsonGuData[key]["Longitude"], 
-                geojsonGuData[key]["Latitude"]
-            ]
-        }
-    }))
-};
 fetch(staticUrl+'/data/gu-geo.json')
     .then(response => response.text())
     .then(data => {
@@ -149,7 +128,7 @@ fetch(staticUrl+'/data/gu-geo.json')
                 .setHTML(`
                     <div class="container d-flex flex-column align-baseline px-2 rounded" id="${dong_name}">
                         <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
-                        <a href='/dashboard/report/${dong_code}/${gu}/${dong_name}/2018/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
+                        <a href='/dashboard/report/summary/${dong_code}/${gu}/${dong_name}/2018/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
                         <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
                     </div>
                 `)

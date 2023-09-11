@@ -6,7 +6,7 @@ bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 def index():
     return render_template('dashboard/index.html')
 
-@bp.route('/report/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
+@bp.route('/report/summary/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report(dong_code, dong, gu, year, quarter, job_code):
 
     return render_template('dashboard/analysis-report.html',active_tab='report', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter)
@@ -29,7 +29,7 @@ def report_environment(dong_code, dong, gu, year, quarter, job_code):
     text_result1 = by_loc(dong_code)
     bar2 = store_num(dong_code)
     bar3 = store_num_trend(dong_code, job_code)
-    bar4 = facility_num(dong_code)
+    bar4 = facility_num(dong_code, year, quarter)
 
     text_result5 = avg_apartment_prices(dong_code)
     bar6 = visualize_avg_apt_prices(dong_code)

@@ -96,8 +96,8 @@ def store_num_trend(dong_code, job_code):
     return graphJSON
 
 # 분석4: 주요 시설 현황
-def facility_num(dong_code):
-    df_filtered_1 = df_facility.loc[(df_facility['기준_년_코드'] == 2022) & (df_facility['기준_분기_코드'] == 4) & (df_facility['행정동_코드'] == int(dong_code))].groupby(['행정동명'])[['관공서_수', '은행_수', '종합병원_수', '일반_병원_수', '약국_수', '유치원_수',
+def facility_num(dong_code, year, quarter):
+    df_filtered_1 = df_facility.loc[(df_facility['기준_년_코드'] == int(year)) & (df_facility['기준_분기_코드'] == int(quarter)) & (df_facility['행정동_코드'] == int(dong_code))].groupby(['행정동명'])[['관공서_수', '은행_수', '종합병원_수', '일반_병원_수', '약국_수', '유치원_수',
        '초등학교_수', '중학교_수', '고등학교_수', '대학교_수', '백화점_수', '슈퍼마켓_수', '극장_수',
        '숙박_시설_수', '공항_수', '철도_역_수', '버스_터미널_수', '지하철_역_수', '버스_정거장_수']].sum().squeeze()
     
