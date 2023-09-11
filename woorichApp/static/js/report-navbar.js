@@ -26,14 +26,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     for (let i = 1; i <= 4; i++) {
       const option = document.createElement('option');
       option.value = i;
-      option.text = `분기 ${i}`;
+      option.text = `${i} 분기`;
       quarterSelect.appendChild(option);
     }
   
     // Adding a submit button and defining its click event handler
     const submitButton = document.createElement('button');
-    submitButton.textContent = 'Submit';
-    submitButton.classList.add('btn', 'btn-primary');
+    submitButton.textContent = '제출';
+    submitButton.classList.add('btn', 'btn-outline-secondary');
     submitButton.addEventListener('click', () => {
       const selectedYear = yearSelect.value;
       const selectedQuarter = quarterSelect.value;

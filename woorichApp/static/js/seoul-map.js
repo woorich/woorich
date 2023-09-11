@@ -122,17 +122,55 @@ fetch(staticUrl+'/data/gu-geo.json')
                 const marker = new mapboxgl.Marker({color: 'white'})
                 .setLngLat([longitude, latitude])
                 .addTo(map);
-        
+                
+                // 샘플 데이터 
+                const recommended_item = ['교육 육아', '커피', '제과제빵', '한식', '주점'];
+
                 const popup = new mapboxgl.Popup({ closeButton: true, offset: 25 }) // Customize popup behavior
                 .setLngLat([longitude, latitude])
                 .setHTML(`
-                    <div class="container d-flex flex-column align-baseline px-2 rounded" id="${dong_name}">
-                        <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
-                        <a href='/dashboard/report/summary/${dong_code}/${gu}/${dong_name}/2018/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
-                        <a href='#' class="btn btn-outline-secondary m-1" id="button-${index}">업종추천</a>
+                    <div class="container px-2 rounded" id="${dong_name}">
+                        <div id="popup-button-list-${index}" class="d-flex flex-column align-baseline" style="display: block;">
+                            <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
+                            <a href='/dashboard/report/summary/${dong_code}/${gu}/${dong_name}/2022/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
+                            <a href='#' class="btn btn-outline-secondary m-1" id="button-recommend-${index}">업종추천</a>
+                        </div>
+
+                        <div id="recommended-list-${index}" style="display: none; text-align:right; padding:5px;">
+                            <div style="align-items:center;">
+                                <span class='my-2 py-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
+                                <button class="btn m-1" id="button-back-${index}"><i class="bi bi-backspace"></i></button>
+                            </div>
+                            <ul style="list-style: none; padding:0; margin:0; text-align:left;">
+                                ${recommended_item.map((item, index) => `<li><h5>${index+1}. ${item}</h5></li>`).join('')}
+                            </ul>
+                        </div>
+
                     </div>
                 `)
-                .addClassName(dong_name)
+                .addClassName(dong_name);
+
+                popup.on('open', () => {
+                    setTimeout(() => {
+                        // Try to get the element again after a delay
+                        let recommendButton = document.getElementById(`button-recommend-${index}`);
+                        let backButton = document.getElementById(`button-back-${index}`);
+                
+                        if(recommendButton) {
+                            recommendButton.addEventListener('click', () => {
+                                document.getElementById(`recommended-list-${index}`).style.display = 'block';
+                                document.getElementById(`popup-button-list-${index}`).style.setProperty('display', 'none', 'important');
+                            });
+                        }
+                
+                        if(backButton) {
+                            backButton.addEventListener('click', () => {
+                                document.getElementById(`recommended-list-${index}`).style.display = 'none';
+                                document.getElementById(`popup-button-list-${index}`).style.display = 'block';
+                            });
+                        }
+                    }, 0); // You can adjust the delay time as needed
+                });
 
                 marker.getElement().addEventListener('click', (e) => {
                     // let currentUrl = location.href.split('/');
@@ -141,7 +179,7 @@ fetch(staticUrl+'/data/gu-geo.json')
 
                     let selectElementDong = document.getElementById('dynamic-select-dong');
                     selectElementDong.value = marker._popup._classList.values().next().value
-                    map.flyTo({ center: [longitude, latitude], zoom: zoom_num, duration: 1200 });
+                    map.flyTo({ center: [longitude, latitude+0.02], zoom: zoom_num, duration: 1200 });
                 });
                 marker.setPopup(popup);  
                 markers.push(marker);
