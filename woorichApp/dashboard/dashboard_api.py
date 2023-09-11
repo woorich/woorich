@@ -346,7 +346,7 @@ def total_rspop(dong_code):
     dong_name = df_rs_population[(df_rs_population['행정동_코드']==int(dong_code))]['행정동명'].iloc[0]
 
     #텍스트로 출력
-    return f"{dong_name}의 총 주거인구 수는 {total_rspop_sum}명 입니다."
+    return total_rspop_sum
 
 # 분석 13: 주거 인구 수 변화 추이
 def total_rspop_line(dong_code):
@@ -441,7 +441,7 @@ def max_rspop(dong_code):
     max_ratio = max(sums.values()) / total_rspop_sum
 
     # 텍스트로 출력
-    return f"{dong_name}는 {column_with_max_sum}이 {max_ratio:.2%}로 가장 많이 살고 있습니다!"
+    return {"1위 분류":column_with_max_sum, "1위 분포율": max_ratio}
 
 # 분석 15: 총 가구 세대 수
 def total_household(dong_code):
@@ -464,7 +464,7 @@ def total_household(dong_code):
     dong_name = df_rs_population[(df_rs_population['행정동_코드']==int(dong_code))]['행정동명'].iloc[0]
 
     # 텍스트로 출력
-    return f"{dong_name}의 총 가구 수는 {total_household_sum}세대 입니다."
+    return total_household_sum
  
 # 분석 16: 총 가구 세대 수 추이
 def total_household_line(dong_code):
@@ -568,17 +568,16 @@ def income_avg(dong_code):
     # 막대 두께 조정
     fig.update_layout(bargap=0.7)
     graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return [f'{dong_name}의 평균 소득 구간은 {categorized_income_dong}분위입니다.', graphJSON]
+    return [categorized_income_dong, graphJSON]
 
 # 생활인구 분석
 # 분석 18: 생활인구 가장 많은 상권 3개
 def get_lifepop_info(year, quarter, dong_code):
-    filtered_df = df_lifepop[(df_lifepop['기준_년_코드'] == year) & (df_lifepop['기준_분기_코드'] == quarter) & (df_lifepop['행정동_코드'] == int(dong_code))]
+    filtered_df = df_lifepop[(df_lifepop['기준_년_코드'] == year) & (df_lifepop['기준_분기_코드'] == quarter) & (df_lifepop['행정동_코드'] == dong_code)]
 
     #입력한 것과 일치하는 데이터가 없으면
     if filtered_df.empty:
-        print("분석 18: 데이터가 존재하지 않습니다.")
-        return None
+        return "해당 조건에 맞는 데이터가 없습니다."
 
     lifepop_value = filtered_df['총_생활인구_수'].sum()  # 조건에 맞는 값들의 총합
     print(f"총 생활인구 수: {lifepop_value}명")
@@ -593,7 +592,7 @@ def get_lifepop_info(year, quarter, dong_code):
         name = row['상권_코드_명']
         lifepop = row['총_생활인구_수']
         print(f"상권 코드: {code}, 상권명: {name}, 생활인구 수: {lifepop}명")
-    # 그래프 색상 설정
+# 그래프 색상 설정
     colors = ['행정동평균', '행정구평균', '서울시평균']
     for template in ["simple_white"]:
     # plotly를 사용하여 막대 그래프 생성
@@ -622,6 +621,14 @@ def get_genlifepop_info(year, quarter, dong_code):
     female_lifepop = filtered_df['여성_생활인구_수'].sum()
     total_lifepop = filtered_df['총_생활인구_수'].sum()
 
+    # 값이 스칼라인지 확인
+    if isinstance(male_lifepop, pd.Series):
+        male_lifepop = male_lifepop.iloc[0]
+    if isinstance(female_lifepop, pd.Series):
+        female_lifepop = female_lifepop.iloc[0]
+    if isinstance(total_lifepop, pd.Series):
+        total_lifepop = total_lifepop.iloc[0]
+
     male_ratio = male_lifepop / total_lifepop
     female_ratio = female_lifepop / total_lifepop
 
@@ -637,8 +644,11 @@ def get_genlifepop_info(year, quarter, dong_code):
         gender_result = "남성"
         lifepop_gender_value = filtered_df['남성_생활인구_수'].sum()
 
-    # 남성과 여성 비율을 파이차트로 시각화
+    # 확인: 값이 스칼라인지 확인
+    if isinstance(lifepop_gender_value, pd.Series):
+        lifepop_gender_value = lifepop_gender_value.iloc[0]
 
+    # 남성과 여성 비율을 파이차트로 시각화
     gender_ratio_data = pd.DataFrame({'성별': ['남성', '여성'], '비율': [male_ratio, female_ratio]})
     fig = px.pie(gender_ratio_data, values='비율', names='성별', title=f"{year}년 {quarter}분기 행정동 코드{dong_code}의 남성/여성 비율")
     graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
@@ -647,23 +657,28 @@ def get_genlifepop_info(year, quarter, dong_code):
 
 # 분석 20: 가장 많은 연령대(수, 비율)
 def get_lifepop_age(year, quarter, dong_code):
+
+    # 중복된 열 제거
+    df_lifepop_copy = df_lifepop.loc[:, ~df_lifepop.columns.duplicated()].copy()
+    print(df_lifepop)
     # 컬럼명 변경
-    df_lifepop.rename(columns={
+    df_lifepop_copy.rename(columns={
           '연령대_10_생활인구_수': '10대',
           '연령대_20_생활인구_수': '20대',
           '연령대_30_생활인구_수': '30대',
           '연령대_40_생활인구_수': '40대',
           '연령대_50_생활인구_수': '50대',
           '연령대_60_이상_생활인구_수': '60대이상'}, inplace=True)
+
     # 해당 연도, 분기, 동 코드에 맞는 데이터 추출
-    filtered_df = df_lifepop[(df_lifepop['기준_년_코드'] == year) & (df_lifepop['기준_분기_코드'] == quarter) & (df_lifepop['행정동_코드'] == int(dong_code))]
+    filtered_df = df_lifepop_copy[(df_lifepop_copy['기준_년_코드'] == year) & (df_lifepop_copy['기준_분기_코드'] == quarter) & (df_lifepop_copy['행정동_코드'] == int(dong_code))]
 
     if filtered_df.empty:
         print("분석 20: 데이터가 존재하지 않습니다.")
         return None
 
     age_columns = ['10대', '20대', '30대', '40대', '50대', '60대이상']
-
+    
     # 연령대별 생활인구 수의 비율 계산
     total_lifepop = filtered_df['총_생활인구_수'].sum()
     ratios = filtered_df[age_columns] / total_lifepop
@@ -768,21 +783,10 @@ def get_lifepop_day(year, quarter, dong_code):
     sat_ratio = sat_lifepop / total_lifepop
     sun_ratio = sun_lifepop / total_lifepop
 
-    # 백분율로 표시할 때 소수점 둘째 자리까지 나타냄
-    print(f"\n해당 행정동의 요일 비율\n"
-         f"월: {mon_ratio:.0%}\n"
-          f"화: {tue_ratio:.0%}\n"
-          f"수: {wed_ratio:.0%}\n"
-          f"목: {thu_ratio:.0%}\n"
-          f"금: {fri_ratio:.0%}\n"
-          f"토: {sat_ratio:.0%}\n"
-          f"일: {sun_ratio:.0%}")
-
-
+    
     # 각 요일별 생활인구 수 막대 그래프 그리기
     day_labels = ['월', '화', '수', '목', '금', '토', '일']
     fig_bar = px.bar(x=day_labels, y=total_per_day, labels={'x': '요일', 'y': '생활인구 수'}, title='각 요일별 생활인구 수')
-    fig_bar.show()
 
     # 행정동의 요일 비율 파이 차트 그리기
     ratios = [mon_ratio, tue_ratio, wed_ratio, thu_ratio, fri_ratio, sat_ratio, sun_ratio]

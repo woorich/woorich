@@ -10,15 +10,15 @@
 <div class="my-5">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link {{ 'active' if active_tab == 'report' else '' }}" href="{{ url_for('dashboard.report', dong_code=dong_code, dong=dong, gu=gu, year=2018, quarter=4, job_code=0) }}" tabindex="-1" aria-current="true">분석 요약</a>
+          <a class="nav-link {{ 'active' if active_tab == 'report' else '' }}" href="{{ url_for('dashboard.report', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter, job_code=0) }}" tabindex="-1" aria-current="true">분석 요약</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ 'active' if active_tab == 'report_environment' else '' }}" href="{{ url_for('dashboard.report_environment', dong_code=dong_code, dong=dong, gu=gu, year=2018, quarter=4, job_code=0) }}">환경 분석</a>
+          <a class="nav-link {{ 'active' if active_tab == 'report_environment' else '' }}" href="{{ url_for('dashboard.report_environment', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter, job_code=0) }}">환경 분석</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ 'active' if active_tab == 'report_sales' else '' }}" href="{{ url_for('dashboard.report_sales', dong_code=dong_code, dong=dong, gu=gu, year=2018, quarter=4, job_code=0) }}">매출 분석</a>
+          <a class="nav-link {{ 'active' if active_tab == 'report_sales' else '' }}" href="{{ url_for('dashboard.report_sales', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter, job_code=0) }}">매출 분석</a>
         </li><li class="nav-item">
-          <a class="nav-link {{ 'active' if active_tab == 'report_population' else '' }}" href="{{ url_for('dashboard.report_population', dong_code=dong_code, dong=dong, gu=gu, year=2018, quarter=4, job_code=0) }}">인구 분석</a>
+          <a class="nav-link {{ 'active' if active_tab == 'report_population' else '' }}" href="{{ url_for('dashboard.report_population', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter, job_code=0) }}">인구 분석</a>
         </li>
     </ul>
 </div>

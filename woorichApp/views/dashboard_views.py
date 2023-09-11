@@ -6,12 +6,12 @@ bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 def index():
     return render_template('dashboard/index.html')
 
-@bp.route('/report/<int:dong_code>/<dong>/<gu>/<int:year>/<int:quarter>/<int:job_code>')
+@bp.route('/report/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report(dong_code, dong, gu, year, quarter, job_code):
 
     return render_template('dashboard/analysis-report.html',active_tab='report', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter)
 
-@bp.route('/report/environment/<int:dong_code>/<dong>/<gu>/<int:year>/<int:quarter>/<int:job_code>')
+@bp.route('/report/environment/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report_environment(dong_code, dong, gu, year, quarter, job_code):
     from woorichApp.dashboard.dashboard_api import (
         zone_num,
@@ -53,7 +53,7 @@ def report_environment(dong_code, dong, gu, year, quarter, job_code):
         apart_text7 = text_result7,
         plot8 = bar8,)
 
-@bp.route('/report/population/<int:dong_code>/<dong>/<gu>/<int:year>/<int:quarter>/<int:job_code>')
+@bp.route('/report/population/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report_population(dong_code, dong, gu, year, quarter, job_code):
     from woorichApp.dashboard.dashboard_api import (
         total_rspop,
@@ -78,7 +78,7 @@ def report_population(dong_code, dong, gu, year, quarter, job_code):
     text_result15 = total_household(dong_code)
     bar16 = total_household_line(dong_code)
     text_bar17 = income_avg(dong_code)
-    bar18 = get_lifepop_info(year, quarter, dong_code)
+    # bar18 = get_lifepop_info(year, quarter, dong_code)
     text_text_bar19 = get_genlifepop_info(year, quarter, dong_code)
     text_bar20 = get_lifepop_age(year, quarter, dong_code)
     text_bar21 = get_lifepop_time(year, quarter, dong_code)
@@ -100,7 +100,7 @@ def report_population(dong_code, dong, gu, year, quarter, job_code):
                             apart_text15 = text_result15,
                             plot16 = bar16,
                             text_plot17 = text_bar17,
-                            plot18 = bar18,
+                            #plot18 = bar18,
                             text_text_plot19 = text_text_bar19,
                             text_plot20 = text_bar20,
                             text_plot21 = text_bar21,
