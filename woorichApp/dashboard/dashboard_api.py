@@ -326,12 +326,12 @@ def show_sales_rate(dong_code,year,quarter):
 
 # 주거인구 분석
 # 분석 12: 행정동별 주거인구 수
-def total_rspop(dong_code):
+def total_rspop(dong_code, year, quarter):
     # 행정동_코드, 기준_년_코드, 기준_분기_코드가 같은 행끼리 filtered_df 데이터프레임 생성
     filtered_df = df_rs_population[
     (df_rs_population['행정동_코드'] == int(dong_code)) &
-    (df_rs_population['기준_년_코드'] == 2022) &
-    (df_rs_population['기준_분기_코드'] == 4)
+    (df_rs_population['기준_년_코드'] == int(year)) &
+    (df_rs_population['기준_분기_코드'] == int(quarter))
     ]
     print(df_rs_population['행정동_코드'].dtype)
     #입력한 것과 일치하는 데이터가 없으면
@@ -374,8 +374,7 @@ def total_rspop_line(dong_code):
             year_quarter.append(f'{str(year), str(quarter)}')
 
     # 그래프 x축, y축, title, label 지정
-    fig = px.line(x=year_quarter, y=list_num,
-                title=f"{dong_name}의 총 주거 인구 수 변화 추이")
+    fig = px.line(x=year_quarter, y=list_num)
 
     # 그래프 커스터 마이징
     fig.update_layout(
@@ -387,12 +386,12 @@ def total_rspop_line(dong_code):
     return graphJSON
 
 # 분석 14: 성별, 연령대별 1위
-def max_rspop(dong_code):
+def max_rspop(dong_code, year, quarter):
     # 행정동_코드, 기준_년_코드, 기준_분기_코드가 같은 행끼리 filtered_df 데이터프레임 생성
     filtered_df = df_rs_population[
     (df_rs_population['행정동_코드'] == int(dong_code)) &
-    (df_rs_population['기준_년_코드'] == 2022) &
-    (df_rs_population['기준_분기_코드'] == 4)
+    (df_rs_population['기준_년_코드'] == int(year)) &
+    (df_rs_population['기준_분기_코드'] == int(quarter))
     ]
 
     #입력한 것과 일치하는 데이터가 없으면
@@ -444,12 +443,12 @@ def max_rspop(dong_code):
     return {"1위 분류":column_with_max_sum, "1위 분포율": max_ratio}
 
 # 분석 15: 총 가구 세대 수
-def total_household(dong_code):
+def total_household(dong_code, year, quarter):
     # 행정동_코드, 기준_년_코드, 기준_분기_코드가 같은 행끼리 filtered_df 데이터프레임 생성
     filtered_df = df_rs_population[
         (df_rs_population['행정동_코드'] == int(dong_code)) &
-        (df_rs_population['기준_년_코드'] == 2022) &
-        (df_rs_population['기준_분기_코드'] == 4)
+        (df_rs_population['기준_년_코드'] == int(year)) &
+        (df_rs_population['기준_분기_코드'] == int(quarter))
         ]
     
     #입력한 것과 일치하는 데이터가 없으면
@@ -491,8 +490,7 @@ def total_household_line(dong_code):
     dong_name = df_rs_population[(df_rs_population['행정동_코드']==int(dong_code))]['행정동명'].iloc[0]
 
     # 그래프 x축, y축, title, label 지정
-    fig = px.line(x=year_quarter, y=list_num,
-                title=f"{dong_name}의 총 가구 수 변화 추이")
+    fig = px.line(x=year_quarter, y=list_num)
 
     # 그래프 커스터 마이징
     fig.update_layout(
@@ -775,6 +773,7 @@ def get_lifepop_day(year, quarter, dong_code):
     sun_lifepop = filtered_df['일요일'].sum()
     total_lifepop = filtered_df['총_생활인구_수'].sum()
 
+    total_lifepop= total_lifepop[0]
     mon_ratio = mon_lifepop / total_lifepop
     tue_ratio = tue_lifepop / total_lifepop
     wed_ratio = wed_lifepop / total_lifepop
@@ -790,19 +789,20 @@ def get_lifepop_day(year, quarter, dong_code):
 
     # 행정동의 요일 비율 파이 차트 그리기
     ratios = [mon_ratio, tue_ratio, wed_ratio, thu_ratio, fri_ratio, sat_ratio, sun_ratio]
+    print(list(ratios))
     data2 = pd.DataFrame(zip(day_labels, ratios), columns=['요일', '비율'])
     # 파이차트 요일 순서대로 출력하기
     fig_pie = px.pie(data2, names='요일', values='비율', title='행정동의 요일 비율',category_orders={'요일':['월', '화', '수', '목', '금', '토', '일']})
     graphJSON =  json.dumps(fig_pie, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return [f"요일별 총 생활인구 수:{total_per_day}명", f"\n최다 생활인구 요일:{max_day}", graphJSON]
+    return [list(zip(day_columns, total_per_day)), max_day, graphJSON]
 
 # 분석 23: 2022년도 4분기 총 생활인구 수
-def get_lifepop_recent(dong_code):
+def get_lifepop_recent(dong_code, year, quarter):
     filtered_df = df_lifepop[
     (df_lifepop['행정동_코드'] == int(dong_code)) &
-    (df_lifepop['기준_년_코드'] == 2022) &
-    (df_lifepop['기준_분기_코드'] == 4)]
+    (df_lifepop['기준_년_코드'] == int(year)) &
+    (df_lifepop['기준_분기_코드'] == int(quarter))]
 
     #입력한 것과 일치하는 데이터가 없으면
     if filtered_df.empty:

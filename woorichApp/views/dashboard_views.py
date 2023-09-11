@@ -72,10 +72,10 @@ def report_population(dong_code, dong, gu, year, quarter, job_code):
         get_workpop_info
     )
 
-    text_result12 = total_rspop(dong_code)
+    text_result12 = total_rspop(dong_code, year, quarter)
     bar13 = total_rspop_line(dong_code)
-    text_result14 = max_rspop(dong_code)
-    text_result15 = total_household(dong_code)
+    text_result14 = max_rspop(dong_code, year, quarter)
+    text_result15 = total_household(dong_code, year, quarter)
     bar16 = total_household_line(dong_code)
     text_bar17 = income_avg(dong_code)
     # bar18 = get_lifepop_info(year, quarter, dong_code)
@@ -83,7 +83,7 @@ def report_population(dong_code, dong, gu, year, quarter, job_code):
     text_bar20 = get_lifepop_age(year, quarter, dong_code)
     text_bar21 = get_lifepop_time(year, quarter, dong_code)
     text_text_bar22 = get_lifepop_day(year, quarter, dong_code)
-    text_result23 = get_lifepop_recent(dong_code)
+    text_result23 = get_lifepop_recent(dong_code, year, quarter)
     bar24 = get_lifepop_line(dong_code)
     text_text_bar25 = get_workpop_info(year, quarter, dong_code)
 

@@ -58,5 +58,10 @@ def create_app():
     # 필터
     from .filter import format_datetime
     app.jinja_env.filters['datetime'] = format_datetime
+    
+    import jinja2
+    env = jinja2.Environment()
+    env.globals.update(zip=zip)
+    # use env to load template(s)
 
     return app

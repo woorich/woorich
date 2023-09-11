@@ -57,9 +57,9 @@
 
       <div class="row">
         <div class="col-2 p-4 m-3 border rounded"
-          style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
-          <h4 class="my-2">평균 소득구간</h4>
-          <h5 class="mt-2">{{ text_plot17[0] | safe }} 분위</h5>
+          style="font-size: larger; width: max-content; height: max-content; border: 1pc solid #a4a4a46e">
+          <h5 class="my-2">평균 소득구간</h5>
+          <h4 class="mt-2 text-center">{{ text_plot17[0] | safe }} 분위</h4>
         </div>
         <div class="col p-4 m-3 border rounded"
           style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
@@ -109,7 +109,7 @@
 
       <div class="row">
         <div class="col p-4 m-3 border rounded"
-          style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
+          style="font-size: larger; border: 1pc solid #a4a4a46e">
           <h4 class="my-2">성별비 차트</h4>
           <div class="chart" id="bargraph19">
             <script>
@@ -119,7 +119,7 @@
           </div>
         </div>
         <div class="col p-4 m-3 border rounded"
-            style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
+            style="font-size: larger; border: 1pc solid #a4a4a46e">
             <h4 class="my-2">연령대 비율</h4>
             <div class="chart" id="bargraph20">
               <script>
@@ -131,14 +131,14 @@
       </div>
       
       <div class="row">
-        <div class="col p-4 m-3 border rounded"
-          style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
+        <div class="col-2 p-4 m-3 border rounded"
+          style="font-size: larger; width: max-content; height: max-content; border: 1pc solid #a4a4a46e">
           <h4 class="my-2">생활인구 가장 많은 시간대</h4>
           <h5 class="mt-2">{{ text_plot21[0] | safe }}</h5>
         </div>
         <div class="col p-4 m-3 border rounded"
-            style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
-            <h4 class="my-2">시간대별 인구</h4>
+          style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
+          <h4 class="my-2">시간대별 인구</h4>
             <div class="chart" id="bargraph21">
               <script>
                 var graphs21 = {{text_plot21[1] | safe}};
@@ -149,64 +149,66 @@
       </div>
       
       <div class="row">
-        <div class="col p-4 m-3 border rounded"
-          style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
-          <h4 class="my-2">요일별 총 생활인구 수</h4>
-          <h5 class="mt-2">{{ text_text_plot22[0] | safe }}</h5>
-        </div>
-        <div class="col p-4 m-3 border rounded"
-            style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
-            <h4 class="my-2">시간대별 인구</h4>
-            <div class="chart" id="bargraph21">
-              <script>
-                var graphs21 = {{text_plot21[1] | safe}};
-                Plotly.plot('bargraph21',graphs21,{});
-              </script>
+        <div class="col-4">
+          <div class="row text-center">
+            <div class="col p-4 m-3 border rounded"
+              style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e">
+              <h4 class="my-2">요일별 총 생활인구 수</h4>
+              <ul class="mt-2 p-0">
+                {% for item in text_text_plot22[0] %}
+                <li style="list-style:none; margin:0;">{{ item[0] }} {{ item[1] }} 명</li>
+              {% endfor %}
+              </ul>
             </div>
+          </div>
+          <div class="row text-center">
+            <div
+              class="col p-3 m-3 border rounded"
+              style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+            >
+              <span>최다 생활인구 요일</span>
+              <h5 class="mt-2">{{ text_text_plot22[1] | safe }}</h5>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div
+              class="col p-3 m-3 border rounded"
+              style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
+            >
+              <span>총 생활인구 수</span>
+              <h5 class="mt-2">{{ aprt_text23 | safe }}</h5>  
+            </div>
+          </div>
+        </div>
+        <div
+          class="col p-3 m-3 border rounded"
+          style="font-size: larger; width: max-content"
+        >
+          <h4>{{ dong }} 요일별 생활인구 비율 </h4>
+          <div class="chart" id="bargraph22">
+            <script>
+              var graphs22 = {{text_text_plot22[2] | safe}};
+              Plotly.plot('bargraph22',graphs22,{});
+            </script>
+          </div>
         </div>
       </div>
       
-      <div
-        class="p-3 m-3 border rounded"
-        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
-      >
-        <span>{{ dong }} 최다 생활인구 요일</span>
-        <h5 class="mt-2">{{ text_text_plot22[1] | safe }}</h5>
-      </div>
-      <div
-        class="p-3 m-3 border rounded"
-        style="font-size: larger; width: max-content"
-      >
-        <span>{{ dong }} 요일별 생활인구 수 </span>
-        <div class="chart" id="bargraph22">
-          <script>
-            var graphs22 = {{text_text_plot22[2] | safe}};
-            Plotly.plot('bargraph22',graphs22,{});
-          </script>
+      <div class="row">
+        <div
+            class="col p-3 m-3 border rounded"
+            style="font-size: larger; width: max-content"
+          >
+            <h4>생활인구 수 변화 추이 </h4>
+            <div class="chart" id="bargraph24">
+              <script>
+                var graphs24 = {{plot24 | safe}};
+                Plotly.plot('bargraph24',graphs24,{});
+              </script>
+            </div>
+          </div>
         </div>
       </div>
-      <div
-        class="p-3 m-3 border rounded"
-        style="font-size: larger; width: max-content; border: 1pc solid #a4a4a46e"
-      >
-        <span>분석23: {{ dong }} 2022년도 4분기 총 생활인구 수</span>
-        <h5 class="mt-2">{{ aprt_text23 | safe }}</h5>
-      </div>
-      <div
-        class="p-3 m-3 border rounded"
-        style="font-size: larger; width: max-content"
-      >
-        <span>분석24: {{ dong }} 생활인구 수 변화 추이 </span>
-        <div class="chart" id="bargraph24">
-          <script>
-            var graphs24 = {{plot24 | safe}};
-            Plotly.plot('bargraph24',graphs24,{});
-          </script>
-        </div>
-      </div>
-    </div>
-  
-    <div class="worker-analysis">
 </div>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 {% endblock %}
