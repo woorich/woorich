@@ -284,9 +284,9 @@ def compare_sales_by_day(dong_code, year, quarter):
 
     
     line_chart_title = f'{df["행정동명"].iloc[0]}의 상권별 최대 매출 업종 요일 별 비교 추이'
-    df_result.iloc[:, 16:23].columns = list(map(lambda x:x[:-8], df_result.iloc[:,16:23].columns))
-    df_real_result = df_result.iloc[:, 16:23]
-    df_real_result.columns = list(map(lambda x:x[:-8], df_result.iloc[:,16:23].columns))
+    df_result.iloc[:, 14:21].columns = list(map(lambda x:x[:-8], df_result.iloc[:,14:21].columns))
+    df_real_result = df_result.iloc[:, 14:21]
+    df_real_result.columns = list(map(lambda x:x[:-8], df_result.iloc[:,14:21].columns))
     df_real_result.index = df_result['상권_코드_명']
     df_real_result.T
 
