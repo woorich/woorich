@@ -162,14 +162,17 @@ fetch(staticUrl+'/data/gu-geo.json')
                                     </button>
                                 </div>
                             </div>
-                            <div class="text-center" id="predict-job-title">업종 타이틀</div>
-                            <ul style="list-style: none; padding:0; margin:0; text-align:left;">
-                                ${
-                                    recommended_item.map((item, index) => {
-                                        //console.log(prediction(dong_code, 3));
-                                        return `<li><h5>${index+1}. ${item}</h5></li>`
-                                    }).join('')
-                                }
+                            <div class="text-center my-3" id="predict-job-title">
+                                <span>업종 타이틀</span>
+                            </div>
+                            <div style="display: flex; justify-content: center; align-items: center;">
+                                <div id="spinner" class="spinner-border text-primary" style="display: none;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <ul style="list-style: none; padding:0; margin:0; text-align:center;">
+                                <div id="prediction_result_list" style="text-align:left;">
+                                </div>
                             </ul>
                         </div>
 
@@ -203,14 +206,28 @@ fetch(staticUrl+'/data/gu-geo.json')
                         const button2 = document.querySelector(`#button-back-${index} ~ .container button[value="2"]`);
                         const button3 = document.querySelector(`#button-back-${index} ~ .container button[value="3"]`);
                         const title = document.getElementById('predict-job-title');
+                        const prediction_list = document.getElementById('prediction_result_list');
                 
                         if(button1) {
                             button1.addEventListener('click', () => {
                                 title.textContent="외식업";
+                                document.getElementById('spinner').style.display = 'block';
+                                document.getElementById('prediction_result_list').style.display = 'none';
                                 fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=1`)
                                     .then(response => response.json())
                                     .then(data => {
                                         console.log(data.result);  // The prediction result
+                                        prediction_list.innerHTML = ""
+                                        prediction_list.innerHTML = data.result.map((item, index)=>{
+                                            return `<li><h5>${index+1} ${item}</h5></li>`
+                                        }).join("")
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    })
+                                    .finally(() => {
+                                        document.getElementById('prediction_result_list').style.display = 'block';
+                                        document.getElementById('spinner').style.display = 'none';  // Hide spinner
                                     });
                             });
                         }
@@ -218,12 +235,48 @@ fetch(staticUrl+'/data/gu-geo.json')
                         if(button2) {
                             button2.addEventListener('click', () => {
                                 title.textContent="서비스업";
+                                document.getElementById('spinner').style.display = 'block';
+                                document.getElementById('prediction_result_list').style.display = 'none';
+                                fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=2`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log(data.result);  // The prediction result
+                                        prediction_list.innerHTML = ""
+                                        prediction_list.innerHTML = data.result.map((item, index)=>{
+                                            return `<li><h5>${index+1} ${item}</h5></li>`
+                                        }).join("")
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    })
+                                    .finally(() => {
+                                        document.getElementById('prediction_result_list').style.display = 'block';
+                                        document.getElementById('spinner').style.display = 'none';  // Hide spinner
+                                    });
                             });
                         }
                 
                         if(button3) {
                             button3.addEventListener('click', () => {
                                 title.textContent="소매업";
+                                document.getElementById('spinner').style.display = 'block';
+                                document.getElementById('prediction_result_list').style.display = 'none';
+                                fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=3`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log(data.result);  // The prediction result
+                                        prediction_list.innerHTML = ""
+                                        prediction_list.innerHTML = data.result.map((item, index)=>{
+                                            return `<li><h5>${index+1} ${item}</h5></li>`
+                                        }).join("")
+                                    })
+                                    .catch((error) => {
+                                        console.log(error);
+                                    })
+                                    .finally(() => {
+                                        document.getElementById('prediction_result_list').style.display = 'block';
+                                        document.getElementById('spinner').style.display = 'none';  // Hide spinner
+                                    });
                             });
                         }
                     }, 0); 

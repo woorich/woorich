@@ -8,10 +8,20 @@ bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 def index():
     return render_template('dashboard/index.html')
 
-@bp.route('/prediction/<int:arg1>/<int:arg2>', methods=['GET'])
-def prediction_api(arg1, arg2):
-    result = prediction(arg1, arg2)
-    return jsonify(result=result)
+@bp.route('/prediction')
+def prediction_api():
+    arg1 = request.args.get('arg1')
+    arg2 = request.args.get('arg2')
+    
+    try:
+        result = prediction(arg1, arg2)
+        return jsonify(result=result)
+    except ValueError as e:
+        if str(e) == "Dataframe has less than 2 non-NaN rows.":
+            return jsonify(error=str(e)), 400
+        else:
+            # Catch any other ValueError
+            return jsonify(error="An unknown error occurred."), 500
 
 @bp.route('/report/summary/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report(dong_code, dong, gu, year, quarter, job_code):

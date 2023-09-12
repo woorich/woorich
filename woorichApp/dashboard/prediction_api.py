@@ -7,6 +7,13 @@ import matplotlib.pyplot as plt
 df_model_data = get_data("select * from df_modeldata")
 df_service = get_data("select * from df_service")
 
+
+df_model_data['기간'] = pd.to_datetime(df_model_data['기간'])
+
+# 서비스_업종_코드 CS100001 -> 100001(int)로 변환
+df_service['서비스_업종_코드'] = df_service['서비스_업종_코드'].str.replace('CS', '')
+df_service['서비스_업종_코드'] = df_service['서비스_업종_코드'].astype(int)
+
 def set_df():
     # '행정동_코드'로 그룹화하여 분리하고 각각의 데이터프레임으로 저장
     grouped = df_model_data.groupby('행정동_코드')
@@ -32,12 +39,7 @@ def set_df():
 
 #예측모델
 def prediction(dong_code, job_code):
-  df_model_data['기간'] = pd.to_datetime(df_model_data['기간'])
-
-  # 서비스_업종_코드 CS100001 -> 100001(int)로 변환
-  df_service['서비스_업종_코드'] = df_service['서비스_업종_코드'].str.replace('CS', '')
-  df_service['서비스_업종_코드'] = df_service['서비스_업종_코드'].astype(int)
-
+  set_df()
   woorich = eval(f'{"df_"+str(dong_code)+"_"+str(job_code)}')
 
   # 데이터프레임 생성
