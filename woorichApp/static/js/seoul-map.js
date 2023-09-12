@@ -88,11 +88,6 @@ fetch(staticUrl+'/data/gu-geo.json')
             // Retrieve the selected district value
             const selectedDistrict = event.target.value;
 
-            // Use the selected district value to focus the map
-            // Replace this with your actual logic to focus on the selected district
-            // For example, you can use geocoding or known coordinates to center the map on the selected district.
-            // Here's a simplified example
-
             let lat = data[selectedDistrict]['위도'];
             let long = data[selectedDistrict]['경도'];
             let zoom_num = data[selectedDistrict]['줌비율'];
@@ -124,12 +119,12 @@ fetch(staticUrl+'/data/gu-geo.json')
                 .addTo(map);
                 
                 // 샘플 데이터 
-                const recommended_item = ['교육 육아', '커피', '제과제빵', '한식', '주점'];
+                const recommended_item = [' ', ' ', ' ', ' ', ' '];
 
                 const popup = new mapboxgl.Popup({ closeButton: true, offset: 25 }) // Customize popup behavior
                 .setLngLat([longitude, latitude])
                 .setHTML(`
-                    <div class="container px-2 rounded" id="${dong_name}">
+                    <div class="container rounded" id="${dong_name}">
                         <div id="popup-button-list-${index}" class="d-flex flex-column align-baseline" style="display: block;">
                             <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
                             <a href='/dashboard/report/summary/${dong_code}/${gu}/${dong_name}/2022/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
@@ -140,9 +135,41 @@ fetch(staticUrl+'/data/gu-geo.json')
                             <div style="align-items:center;">
                                 <span class='my-2 py-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
                                 <button class="btn m-1" id="button-back-${index}"><i class="bi bi-backspace"></i></button>
+                                <div class="container d-flex justify-between mb-3 m-0 p-0">
+                                    <button
+                                        type="button"
+                                        class="d-block btn btn-outline-primary mx-2"
+                                        style="font-size: 0.8rem"
+                                        value="1"
+                                    >
+                                        <i class="fas fa-utensils"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="d-block btn btn-outline-primary mx-2"
+                                        style="font-size: 0.8rem"
+                                        value="2"
+                                    >
+                                        <i class="fas fa-handshake"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="d-block btn btn-outline-primary mx-2"
+                                        style="font-size: 0.8rem"
+                                        value="3"
+                                    >
+                                        <i class="fas fa-store"></i>
+                                    </button>
+                                </div>
                             </div>
+                            <div class="text-center" id="predict-job-title">업종 타이틀</div>
                             <ul style="list-style: none; padding:0; margin:0; text-align:left;">
-                                ${recommended_item.map((item, index) => `<li><h5>${index+1}. ${item}</h5></li>`).join('')}
+                                ${
+                                    recommended_item.map((item, index) => {
+                                        //console.log(prediction(dong_code, 3));
+                                        return `<li><h5>${index+1}. ${item}</h5></li>`
+                                    }).join('')
+                                }
                             </ul>
                         </div>
 
@@ -169,7 +196,35 @@ fetch(staticUrl+'/data/gu-geo.json')
                                 document.getElementById(`popup-button-list-${index}`).style.display = 'block';
                             });
                         }
-                    }, 0); // You can adjust the delay time as needed
+                    }, 0); 
+                    
+                    setTimeout(() => {
+                        const button1 = document.querySelector(`#button-back-${index} ~ .container button[value="1"]`);
+                        const button2 = document.querySelector(`#button-back-${index} ~ .container button[value="2"]`);
+                        const button3 = document.querySelector(`#button-back-${index} ~ .container button[value="3"]`);
+                        const title = document.getElementById('predict-job-title');
+                
+                        if(button1) {
+                            button1.addEventListener('click', () => {
+                                title.textContent="외식업";
+                                // ... Your code to handle the click event for button 1
+                            });
+                        }
+                
+                        if(button2) {
+                            button2.addEventListener('click', () => {
+                                title.textContent="서비스업";
+                                // ... Your code to handle the click event for button 2
+                            });
+                        }
+                
+                        if(button3) {
+                            button3.addEventListener('click', () => {
+                                title.textContent="소매업";
+                                // ... Your code to handle the click event for button 3
+                            });
+                        }
+                    }, 0); 
                 });
 
                 marker.getElement().addEventListener('click', (e) => {
@@ -286,34 +341,3 @@ map.on('load', function() {
 
     // });
 });
-
-/////////////////////////////////////////////////////////////////////////////////////
-
-function show_report() {
-    var selectedGu = document.getElementById('dynamic-select-gu').value;
-    var selectedDong = document.getElementById('dynamic-select-dong').value;
-
-    console.log("Selected 행정구: " + selectedGu + "\nSelected 행정동: " + selectedDong);
-
-    var resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = "<br> 선택된 행정구: " + "<h3>" + selectedGu + "</h3>" + "<br> 선택된 행정동: " + "<h3>" + selectedDong+"</h3><br>";
-
-    fetch(staticUrl+'/data/gu-dong-coord-data.csv')
-    .then(response => response.text())
-    .then(csvData => {
-        const rows = csvData.split('\n');
-        for(let i=0; i < rows.length;i++){
-            let item = rows[i].split(',');
-            let dong_code = item[1];
-            let gu = item[2];
-            let dong = item[3];
-            let latitude = item[4];
-            let longitude = item[5];
-            if ((selectedGu == gu) && (selectedDong == dong)) {
-                window.location.href = `/dashboard/report?dong_code=${dong_code}&gu=${gu}&dong=${dong}`;
-                break;
-            }
-        }
-    })
-    .catch(error => console.error('Error loading CSV:', error));
-}

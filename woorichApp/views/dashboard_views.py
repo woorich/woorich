@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, request
+from woorichApp.dashboard.prediction_api import prediction
 
 bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
+
 @bp.route('/')
 def index():
-    return render_template('dashboard/index.html')
+    result = prediction
+    return render_template('dashboard/index.html', result=result)
 
 @bp.route('/report/summary/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report(dong_code, dong, gu, year, quarter, job_code):
