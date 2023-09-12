@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from woorichApp.dashboard.prediction_api import prediction
 
 bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -6,8 +6,12 @@ bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 @bp.route('/')
 def index():
-    result = prediction
-    return render_template('dashboard/index.html', result=result)
+    return render_template('dashboard/index.html')
+
+@bp.route('/prediction/<int:arg1>/<int:arg2>', methods=['GET'])
+def prediction_api(arg1, arg2):
+    result = prediction(arg1, arg2)
+    return jsonify(result=result)
 
 @bp.route('/report/summary/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report(dong_code, dong, gu, year, quarter, job_code):

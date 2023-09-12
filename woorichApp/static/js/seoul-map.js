@@ -207,21 +207,23 @@ fetch(staticUrl+'/data/gu-geo.json')
                         if(button1) {
                             button1.addEventListener('click', () => {
                                 title.textContent="외식업";
-                                // ... Your code to handle the click event for button 1
+                                fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=1`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log(data.result);  // The prediction result
+                                    });
                             });
                         }
                 
                         if(button2) {
                             button2.addEventListener('click', () => {
                                 title.textContent="서비스업";
-                                // ... Your code to handle the click event for button 2
                             });
                         }
                 
                         if(button3) {
                             button3.addEventListener('click', () => {
                                 title.textContent="소매업";
-                                // ... Your code to handle the click event for button 3
                             });
                         }
                     }, 0); 
