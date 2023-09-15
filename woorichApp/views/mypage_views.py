@@ -37,3 +37,8 @@ def update_user_info(user_id):
 def scrap_list(user_id):
     user = g.user
     return render_template('mypage/scrap_list.html', user=user)
+
+@bp.route('/manager_page/<user_id>', methods=['GET','POST'])
+def manager_page(user_id):
+    user = g.user
+    return render_template('mypage/manager.html', user=user)

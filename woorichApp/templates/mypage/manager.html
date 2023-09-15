@@ -1,0 +1,27 @@
+{% extends "mypage/mypage.html" %}
+{% block content %}
+<style>
+  .card:hover{
+    box-shadow: antiquewhite;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Left Sidebar -->
+    {% include "mypage/sidebar.html" %}
+
+    <!-- Right Content -->
+    <div id="right-content" class="right-section col-10 p-5">
+      <h2>관리자 페이지</h2>
+      <div class="intro-text p-3">
+        안녕하세요 관리자님.
+      </div>
+
+      <h4 class="my-5">업종 추천 모델 정보</h4>
+
+      
+    </div>
+  </div>
+</div>
+  
+{% endblock %}

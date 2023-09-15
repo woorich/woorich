@@ -31,6 +31,9 @@
       <ul style="font-family: 'Noto Sans KR', sans-serif;">
         <!--<li><a href="{{ url_for('mypage.scrap_list', user_id=user.user_id )}}" class="menu-item" id="scrap_list">스크랩 목록</a></li>-->
         <li><a href="{{ url_for('mypage.update_user_info', user_id=user.user_id) }}" class="menu-item" id="account_settings">계정 설정</a></li>
+        {% if g.user.is_admin %}
+          <li><a href="{{ url_for('mypage.manager_page', user_id=user.user_id) }}" class="menu-item" id="manager_page">관리자 페이지</a></li>
+        {% endif %}
       </ul>
     </div>
 </div>

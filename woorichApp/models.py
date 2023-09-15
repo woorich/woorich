@@ -10,6 +10,7 @@ class User(db.Model):
     phone = db.Column(db.String(45), unique=True, nullable=False)
     address = db.Column(db.String(100), unique=True, nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
     
     def delete(self):
         db.session.delete(self)
