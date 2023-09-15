@@ -1,5 +1,6 @@
-{% extends 'layouts/base.html' %} {% block content %}
-<div class="container my-3">
+{% extends 'layouts/base.html' %} 
+{% block content %}
+<div class="container my-3 px-5">
   <!-- flash 오류 -->
   {% for message in get_flashed_messages() %}
   <div class="alert alert-danger" role="alert">{{ message }}</div>
@@ -30,6 +31,8 @@
           class="btn btn-sm btn-outline-secondary"
           >수정</a
         >
+        {% endif %}
+        {% if g.user.is_admin %}
         <a
           href="javascript:void(0)"
           class="delete btn btn-sm btn-outline-secondary"
@@ -69,17 +72,21 @@
           class="btn btn-sm btn-outline-secondary"
           >수정</a
         >
-        <a
-          href="javascript:void(0)"
-          class="delete btn btn-sm btn-outline-secondary"
-          data-uri="{{ url_for('reply.delete', reply_id=reply.no) }}"
-          >삭제</a
-        >
+          {% if g.user == reply.admin or g.user.is_admin %}
+          <a
+            href="javascript:void(0)"
+            class="delete btn btn-sm btn-outline-secondary"
+            data-uri="{{ url_for('reply.delete', reply_id=reply.no) }}"
+            >삭제</a
+          >
+          {% endif %}
         {% endif %}
       </div>
     </div>
   </div>
   {% endfor %}
+
+  {% if g.user.is_admin %}
   <!-- 답변 등록 -->
   <form
     action="{{ url_for('reply.create', board_no=board.no) }}"
@@ -103,13 +110,6 @@
     <!-- 오류표시 End -->
     <div class="mb-3">
       <textarea
-        {%
-        if
-        not
-        g.user
-        %}disabled{%
-        endif
-        %}
         name="content"
         id="content"
         class="form-control"
@@ -119,7 +119,9 @@
     <input type="submit" value="답변등록" class="btn btn-primary" />
   </form>
 </div>
-{% endblock %} {% block script %}
+{% endif %}
+{% endblock %} 
+{% block script %}
 <script type="text/javascript">
   const delete_elements = document.getElementsByClassName("delete");
   Array.from(delete_elements).forEach(function (element) {
