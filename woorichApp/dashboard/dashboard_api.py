@@ -7,7 +7,7 @@ import numpy as np
 import json
 from woorichApp.dashboard.cache_utils import get_data
 
-df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")
+df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류_코드, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")
 df_facility = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 관공서_수, 은행_수, 종합병원_수, 일반_병원_수, 약국_수, 유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 대학교_수, 백화점_수, 슈퍼마켓_수, 극장_수, 숙박_시설_수, 공항_수, 철도_역_수, 버스_터미널_수, 지하철_역_수, 버스_정거장_수 from df_facility")
 df_apart = get_data("select dong_code, year, quarter, avg_price, `~1`, `1~2`, `2~3`, `3~4`, `4~5`, `5~6`, `6~`, `~66sm`, `66~99sm`, `99~132sm`, `132~165sm`, `165sm~` from df_apart")
 df_map_info = get_data("select 행정동_코드, 행정동명, 엑스좌표_값, 와이좌표_값, 상권_코드, 상권_구분_코드_명, 상권_코드_명 from df_map_info")
@@ -73,27 +73,45 @@ def store_num(dong_code):
 
 # 분석3: 업종별 업소 수 3년 추이
 def store_num_trend(dong_code, job_code):
-    df_filtered= df_store[(df_store['행정동_코드']==int(dong_code)) & (df_store['업종_대분류'] == job_code)]
-    if df_filtered.empty:
-        print("분석3: 데이터가 존재하지 않습니다.")
-        return None
+    jobs = ['', '외식업', '서비스업', '소매업']
+    traces = []
     
-    df = df_filtered.groupby(['기준_년_코드', '기준_분기_코드'])[['점포_수']].sum()
-    x=list(range(24))
-
-    for i in range(24):
-        x[i]=(f'202{i//4}'+'_'+f'{(i%4)+1}')
-    colors = ['점포 수']
-    for template in ["simple_white"]:
-        fig = px.line(df, x=x, y='점포_수',
-                    labels={'기준_분기_코드': '분기', '점포_수': '점포 수'},
-                    title='분기별 업소 수 추이',
-                    template=template)
-    fig.update_xaxes(title_text='시기')
-    fig.update_traces(line_width=4,line_dash='dash',line_color='rgb(128,177,211)')
-    # fig.show()
-    graphJSON =  json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+    colors = ["rgb(141,211,199)", "rgb(190,168,218)", "rgb(251,128,114)"]  # specify colors for each trace
+    
+    for i in range(1, 4):
+        df_filtered= df_store[(df_store['행정동_코드']==int(dong_code)) & (df_store['업종_대분류_코드'] == i)]
+        
+        if df_filtered.empty:
+            print("분석3: 데이터가 존재하지 않습니다.")
+            continue
+        
+        df = df_filtered.groupby(['기준_년_코드', '기준_분기_코드'])[['점포_수']].sum()
+        
+        x = [f'202{i//4}_{(i%4)+1}' for i in range(24)]
+        
+        trace = {
+            'x': x,
+            'y': df['점포_수'].tolist(),
+            'mode': 'lines',
+            'name': f'{jobs[i]}',
+            'line': {'color': colors[i-1], 'width': 4}
+        }
+        
+        traces.append(trace)
+    
+    layout = {
+        'title': '분기별 업종들 업소 수 추이',
+        'xaxis': {'title': '시기'},
+        'yaxis': {'title': '점포 수'},
+        'template': 'simple_white'
+    }
+    
+    fig = {
+        'data': traces,
+        'layout': layout
+    }
+    
+    return fig
 
 # 분석4: 주요 시설 현황
 def facility_num(dong_code, year, quarter):
