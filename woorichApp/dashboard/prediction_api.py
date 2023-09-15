@@ -125,4 +125,7 @@ def prediction(dong_code, job_code):
   # plt.show()
 
   # top_5_service_names 출력
-  return top_5_service_names
+  if top_5_service_names:
+    return top_5_service_names
+  else:
+     return "데이터가 부족합니다."

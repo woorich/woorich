@@ -216,11 +216,15 @@ fetch(staticUrl+'/data/gu-geo.json')
                                 fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=1`)
                                     .then(response => response.json())
                                     .then(data => {
-                                        console.log(data.result);  // The prediction result
                                         prediction_list.innerHTML = ""
-                                        prediction_list.innerHTML = data.result.map((item, index)=>{
-                                            return `<li><h5>${index+1} ${item}</h5></li>`
-                                        }).join("")
+                                        if (typeof data.result != 'undefined'){
+                                            prediction_list.innerHTML = data.result.map((item, index)=>{
+                                                return `<li><h5>${index+1} ${item}</h5></li>`
+                                            }).join("")
+                                        }
+                                        else {
+                                            prediction_list.innerHTML = '죄송합니다.\n 데이터가 충분하지 \n 않습니다.'
+                                        }
                                     })
                                     .catch(error => {
                                         console.log(error);
@@ -240,11 +244,15 @@ fetch(staticUrl+'/data/gu-geo.json')
                                 fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=2`)
                                     .then(response => response.json())
                                     .then(data => {
-                                        console.log(data.result);  // The prediction result
                                         prediction_list.innerHTML = ""
-                                        prediction_list.innerHTML = data.result.map((item, index)=>{
-                                            return `<li><h5>${index+1} ${item}</h5></li>`
-                                        }).join("")
+                                        if (typeof data.result != 'undefined'){
+                                            prediction_list.innerHTML = data.result.map((item, index)=>{
+                                                return `<li><h5>${index+1} ${item}</h5></li>`
+                                            }).join("")
+                                        }
+                                        else {
+                                            prediction_list.innerHTML = '죄송합니다.\n 데이터가 충분하지 \n 않습니다.'
+                                        }
                                     })
                                     .catch(error => {
                                         console.log(error);
@@ -264,11 +272,15 @@ fetch(staticUrl+'/data/gu-geo.json')
                                 fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=3`)
                                     .then(response => response.json())
                                     .then(data => {
-                                        console.log(data.result);  // The prediction result
                                         prediction_list.innerHTML = ""
-                                        prediction_list.innerHTML = data.result.map((item, index)=>{
-                                            return `<li><h5>${index+1} ${item}</h5></li>`
-                                        }).join("")
+                                        if (typeof data.result != 'undefined'){
+                                            prediction_list.innerHTML = data.result.map((item, index)=>{
+                                                return `<li><h5>${index+1} ${item}</h5></li>`
+                                            }).join("")
+                                        }
+                                        else {
+                                            prediction_list.innerHTML = '죄송합니다.\n 데이터가 충분하지 \n 않습니다.'
+                                        }
                                     })
                                     .catch((error) => {
                                         console.log(error);
