@@ -1,23 +1,21 @@
-# Use the official Python image as a base image
-FROM python:3.10-bookworm
+FROM tiangolo/uwsgi-nginx:python3.10
 
-# Copy the current directory contents inside the container at /app/woorichApp
-COPY . /app/woorichApp/
+# Install requirements
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-# Change directory to /app/woorichApp inside the container
-WORKDIR /app/woorichApp
+# URL under which static (not modified by Python) files will be requested
+# They will be served by Nginx directly, without being handled by uWSGI
+ENV STATIC_URL /static
+# Absolute path in where the static files wil be
+ENV STATIC_PATH /woorichApp/static
 
-# Copy the requirements file outside the container into the container at /app
-COPY requirements.txt /app/requirements.txt
+# If STATIC_INDEX is 1, serve / with /static/index.html directly (or the static URL configured)
+# ENV STATIC_INDEX 1
+ENV STATIC_INDEX 0
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
-
-# Define environment variables for RDS connection
-ENV FLASK_APP woorichApp
-
-# Run the Flask application
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+# Add demo app
+COPY . /woorichApp
+COPY config.py config.py
+COPY main.py main.py
+WORKDIR /woorichApp
