@@ -89,42 +89,52 @@ def report_population(dong_code, dong, gu, year, quarter, job_code):
         get_workpop_info
     )
 
-    text_result12 = total_rspop(dong_code, year, quarter)
-    bar13 = total_rspop_line(dong_code)
-    text_result14 = max_rspop(dong_code, year, quarter)
-    text_result15 = total_household(dong_code, year, quarter)
-    bar16 = total_household_line(dong_code)
-    text_bar17 = income_avg(dong_code)
-    # bar18 = get_lifepop_info(year, quarter, dong_code)
-    text_text_bar19 = get_genlifepop_info(year, quarter, dong_code)
-    text_bar20 = get_lifepop_age(year, quarter, dong_code)
-    text_bar21 = get_lifepop_time(year, quarter, dong_code)
-    text_text_bar22 = get_lifepop_day(year, quarter, dong_code)
-    text_result23 = get_lifepop_recent(dong_code, year, quarter)
-    bar24 = get_lifepop_line(dong_code)
-    text_text_bar25 = get_workpop_info(year, quarter, dong_code)
+    try:
+        text_result12 = total_rspop(dong_code, year, quarter)
+        bar13 = total_rspop_line(dong_code)
+        text_result14 = max_rspop(dong_code, year, quarter)
+        text_result15 = total_household(dong_code, year, quarter)
+        bar16 = total_household_line(dong_code)
+        text_bar17 = income_avg(dong_code)
+        # bar18 = get_lifepop_info(year, quarter, dong_code)
+        text_text_bar19 = get_genlifepop_info(year, quarter, dong_code)
+        text_bar20 = get_lifepop_age(year, quarter, dong_code)
+        text_bar21 = get_lifepop_time(year, quarter, dong_code)
+        text_text_bar22 = get_lifepop_day(year, quarter, dong_code)
+        text_result23 = get_lifepop_recent(dong_code, year, quarter)
+        bar24 = get_lifepop_line(dong_code)
+        text_text_bar25 = get_workpop_info(year, quarter, dong_code)
 
-    return render_template('dashboard/population-analysis.html',
-                           active_tab='report_population', 
-                           dong_code=dong_code, 
-                           dong=dong, 
-                           gu=gu, 
-                           year=year, 
-                           quarter=quarter,
-                           apart_text12 = text_result12,
-                            plot13 = bar13,
-                            apart_text14 = text_result14,
-                            apart_text15 = text_result15,
-                            plot16 = bar16,
-                            text_plot17 = text_bar17,
-                            #plot18 = bar18,
-                            text_text_plot19 = text_text_bar19,
-                            text_plot20 = text_bar20,
-                            text_plot21 = text_bar21,
-                            text_text_plot22 = text_text_bar22,
-                            apart_text23 = text_result23,
-                            plot24 = bar24,
-                            text_text_plot25 = text_text_bar25)
+        return render_template('dashboard/population-analysis.html',
+                            active_tab='report_population', 
+                            dong_code=dong_code, 
+                            dong=dong, 
+                            gu=gu, 
+                            year=year, 
+                            quarter=quarter,
+                            apart_text12 = text_result12,
+                                plot13 = bar13,
+                                apart_text14 = text_result14,
+                                apart_text15 = text_result15,
+                                plot16 = bar16,
+                                text_plot17 = text_bar17,
+                                #plot18 = bar18,
+                                text_text_plot19 = text_text_bar19,
+                                text_plot20 = text_bar20,
+                                text_plot21 = text_bar21,
+                                text_text_plot22 = text_text_bar22,
+                                apart_text23 = text_result23,
+                                plot24 = bar24,
+                                text_text_plot25 = text_text_bar25)
+    except IndexError:
+        return render_template('dashboard/error.html',
+                            active_tab='report_population', 
+                            dong_code=dong_code, 
+                            dong=dong, 
+                            gu=gu, 
+                            year=year, 
+                            quarter=quarter,)
+
 
 @bp.route('/report/sales/<int:dong_code>/<dong>/<gu>/<int:year>/<int:quarter>/<int:job_code>')
 def report_sales(dong_code, dong, gu, year, quarter, job_code):
