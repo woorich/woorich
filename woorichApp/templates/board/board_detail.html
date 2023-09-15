@@ -23,23 +23,23 @@
           <div class="mb-2">{{ board.user.username }}</div>
           <div>{{ board.created_at|datetime }}</div>
         </div>
-      </div>
-      <div class="my-3">
-        {% if g.user == board.user %}
-        <a
-          href="{{ url_for('board.modify', board_no=board.no) }}"
-          class="btn btn-sm btn-outline-secondary"
-          >수정</a
-        >
-        {% endif %}
-        {% if g.user.is_admin %}
-        <a
-          href="javascript:void(0)"
-          class="delete btn btn-sm btn-outline-secondary"
-          data-uri="{{ url_for('board.delete', board_no=board.no) }}"
-          >삭제</a
-        >
-        {% endif %}
+        </div>
+        <div class="my-3">
+          {% if g.user == board.user %}
+          <a
+            href="{{ url_for('board.modify', board_no=board.no) }}"
+            class="btn btn-sm btn-outline-secondary"
+            >수정</a
+          >
+          {% endif %}
+          {% if g.user.is_admin or g.user == board.user %}
+          <a
+            href="javascript:void(0)"
+            class="delete btn btn-sm btn-outline-secondary"
+            data-uri="{{ url_for('board.delete', board_no=board.no) }}"
+            >삭제</a
+          >
+          {% endif %}
       </div>
     </div>
   </div>
