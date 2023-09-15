@@ -41,14 +41,27 @@ PyMySQL==1.1.0
 pyparsing==3.1.1
 python-dateutil==2.8.2
 python-dotenv==1.0.0
+<<<<<<< HEAD
 pytz==2023.3.post1
 redis==5.0.0
 six==1.16.0
+=======
+redis==5.0.0
+>>>>>>> 8ed949e8d2d960d2f32b59891c3a498eb25094ba
 SQLAlchemy==2.0.20
 tenacity==8.2.3
 tqdm==4.66.1
 typing_extensions==4.7.1
+<<<<<<< HEAD
 tzdata==2023.3
 watchdog==3.0.0
 Werkzeug==2.3.7
 WTForms==3.0.1
+=======
+watchdog==3.0.0
+Werkzeug==2.3.7
+WTForms==3.0.1
+plotly
+pandas
+io
+>>>>>>> 8ed949e8d2d960d2f32b59891c3a498eb25094ba
