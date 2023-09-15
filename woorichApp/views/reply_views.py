@@ -15,7 +15,7 @@ def create(board_no):  # URL 파라미터 명 변경
     form = ReplyForm()
     board = Board.query.get_or_404(board_no)  # 모델명 변경
     if form.validate_on_submit():
-        content = request.form['content']
+        content = request.form['r_content']
         reply = Reply(r_content=content, created_at=datetime.now(), user=g.user, board=board)  # 모델명 변경
         db.session.add(reply)
         db.session.commit()

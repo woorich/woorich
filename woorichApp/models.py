@@ -33,6 +33,8 @@ class Reply(db.Model):
     admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
     board_no = db.Column(db.Integer, db.ForeignKey('board.no', ondelete='CASCADE'))
     board = db.relationship(Board, backref=db.backref('reply'))
+    user_no = db.Column(db.Integer, db.ForeignKey('user.no', ondelete='CASCADE'))
+    user = db.relationship('User', backref=db.backref('reply'))
 
 class Admin(db.Model):
     __tablename__ = 'admin'
