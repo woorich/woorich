@@ -54,3 +54,4 @@ def get_data(query: str) -> pd.DataFrame:
     except pymysql.MySQLError as e:
         print(f"MySQL 에러: {e}")
         return pd.DataFrame()
+    

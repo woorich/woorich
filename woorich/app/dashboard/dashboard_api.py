@@ -7,18 +7,53 @@ import numpy as np
 import json
 
 from app.dashboard.cache_utils import get_data
+from multiprocessing import Pool
 
-df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류_코드, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")
-df_facility = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 관공서_수, 은행_수, 종합병원_수, 일반_병원_수, 약국_수, 유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 대학교_수, 백화점_수, 슈퍼마켓_수, 극장_수, 숙박_시설_수, 공항_수, 철도_역_수, 버스_터미널_수, 지하철_역_수, 버스_정거장_수 from df_facility")
-df_apart = get_data("select dong_code, year, quarter, avg_price, `~1`, `1~2`, `2~3`, `3~4`, `4~5`, `5~6`, `6~`, `~66sm`, `66~99sm`, `99~132sm`, `132~165sm`, `165sm~` from df_apart")
-df_map_info = get_data("select 행정동_코드, 행정동명, 엑스좌표_값, 와이좌표_값, 상권_코드, 상권_구분_코드_명, 상권_코드_명 from df_map_info")
-df_rs_population = get_data("select 행정동_코드, 기준_년_코드, 기준_분기_코드, `총 상주인구 수`, `총 가구 수`, `남성연령대 10 상주인구 수`, `남성연령대 20 상주인구 수`, `남성연령대 30 상주인구 수`, `남성연령대 40 상주인구 수`, `남성연령대 50 상주인구 수`, `남성연령대 60 이상 상주인구 수`, `여성연령대 10 상주인구 수`, `여성연령대 20 상주인구 수`, `여성연령대 30 상주인구 수`, `여성연령대 40 상주인구 수`, `여성연령대 50 상주인구 수`, `여성연령대 60 이상 상주인구 수`, 행정동명 from df_rs_population")
-df_rs_income = get_data("select 행정동_코드, 시군구_코드, 행정동명, 시군구명, 월_평균_소득_금액 from df_rs_income")
-df_lifepop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 총_생활인구_수, 상권_코드, 상권_코드_명, 남성_생활인구_수, 여성_생활인구_수, 총_생활인구_수, 연령대_10_생활인구_수, 연령대_20_생활인구_수, 연령대_30_생활인구_수, 연령대_40_생활인구_수, 연령대_50_생활인구_수, 연령대_60_이상_생활인구_수, 시간대_1_생활인구_수, 시간대_2_생활인구_수, 시간대_3_생활인구_수, 시간대_4_생활인구_수, 시간대_5_생활인구_수, 시간대_6_생활인구_수, 월요일_생활인구_수, 화요일_생활인구_수, 수요일_생활인구_수, 목요일_생활인구_수, 금요일_생활인구_수, 토요일_생활인구_수, 일요일_생활인구_수 from df_lifepop")
-df_sales = get_data("select * from df_sales")
-df_total_sales = get_data("select 지출_총금액, 행정동_코드 from df_total_sales")
-df_income_consume = get_data("select * from df_income_consume")
-df_workpop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 총_직장인구_수, 상권_코드, 상권_코드_명 from df_workpop")
+
+# df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류_코드, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")
+# df_facility = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 관공서_수, 은행_수, 종합병원_수, 일반_병원_수, 약국_수, 유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 대학교_수, 백화점_수, 슈퍼마켓_수, 극장_수, 숙박_시설_수, 공항_수, 철도_역_수, 버스_터미널_수, 지하철_역_수, 버스_정거장_수 from df_facility")
+# df_apart = get_data("select dong_code, year, quarter, avg_price, `~1`, `1~2`, `2~3`, `3~4`, `4~5`, `5~6`, `6~`, `~66sm`, `66~99sm`, `99~132sm`, `132~165sm`, `165sm~` from df_apart")
+# df_map_info = get_data("select 행정동_코드, 행정동명, 엑스좌표_값, 와이좌표_값, 상권_코드, 상권_구분_코드_명, 상권_코드_명 from df_map_info")
+# df_rs_population = get_data("select 행정동_코드, 기준_년_코드, 기준_분기_코드, `총 상주인구 수`, `총 가구 수`, `남성연령대 10 상주인구 수`, `남성연령대 20 상주인구 수`, `남성연령대 30 상주인구 수`, `남성연령대 40 상주인구 수`, `남성연령대 50 상주인구 수`, `남성연령대 60 이상 상주인구 수`, `여성연령대 10 상주인구 수`, `여성연령대 20 상주인구 수`, `여성연령대 30 상주인구 수`, `여성연령대 40 상주인구 수`, `여성연령대 50 상주인구 수`, `여성연령대 60 이상 상주인구 수`, 행정동명 from df_rs_population")
+# df_rs_income = get_data("select 행정동_코드, 시군구_코드, 행정동명, 시군구명, 월_평균_소득_금액 from df_rs_income")
+# df_lifepop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 총_생활인구_수, 상권_코드, 상권_코드_명, 남성_생활인구_수, 여성_생활인구_수, 총_생활인구_수, 연령대_10_생활인구_수, 연령대_20_생활인구_수, 연령대_30_생활인구_수, 연령대_40_생활인구_수, 연령대_50_생활인구_수, 연령대_60_이상_생활인구_수, 시간대_1_생활인구_수, 시간대_2_생활인구_수, 시간대_3_생활인구_수, 시간대_4_생활인구_수, 시간대_5_생활인구_수, 시간대_6_생활인구_수, 월요일_생활인구_수, 화요일_생활인구_수, 수요일_생활인구_수, 목요일_생활인구_수, 금요일_생활인구_수, 토요일_생활인구_수, 일요일_생활인구_수 from df_lifepop")
+# df_sales = get_data("select * from df_sales")
+# df_total_sales = get_data("select 지출_총금액, 행정동_코드 from df_total_sales")
+# df_income_consume = get_data("select * from df_income_consume")
+# df_workpop = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 총_직장인구_수, 상권_코드, 상권_코드_명 from df_workpop")
+
+query_list = [
+    "select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류_코드, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store",
+    "select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 관공서_수, 은행_수, 종합병원_수, 일반_병원_수, 약국_수, 유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 대학교_수, 백화점_수, 슈퍼마켓_수, 극장_수, 숙박_시설_수, 공항_수, 철도_역_수, 버스_터미널_수, 지하철_역_수, 버스_정거장_수 from df_facility",
+    "select dong_code, year, quarter, avg_price, `~1`, `1~2`, `2~3`, `3~4`, `4~5`, `5~6`, `6~`, `~66sm`, `66~99sm`, `99~132sm`, `132~165sm`, `165sm~` from df_apart",
+    "select 행정동_코드, 행정동명, 엑스좌표_값, 와이좌표_값, 상권_코드, 상권_구분_코드_명, 상권_코드_명 from df_map_info",
+    "select 행정동_코드, 기준_년_코드, 기준_분기_코드, `총 상주인구 수`, `총 가구 수`, `남성연령대 10 상주인구 수`, `남성연령대 20 상주인구 수`, `남성연령대 30 상주인구 수`, `남성연령대 40 상주인구 수`, `남성연령대 50 상주인구 수`, `남성연령대 60 이상 상주인구 수`, `여성연령대 10 상주인구 수`, `여성연령대 20 상주인구 수`, `여성연령대 30 상주인구 수`, `여성연령대 40 상주인구 수`, `여성연령대 50 상주인구 수`, `여성연령대 60 이상 상주인구 수`, 행정동명 from df_rs_population",
+    "select 행정동_코드, 시군구_코드, 행정동명, 시군구명, 월_평균_소득_금액 from df_rs_income",
+    "select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 총_생활인구_수, 상권_코드, 상권_코드_명, 남성_생활인구_수, 여성_생활인구_수, 총_생활인구_수, 연령대_10_생활인구_수, 연령대_20_생활인구_수, 연령대_30_생활인구_수, 연령대_40_생활인구_수, 연령대_50_생활인구_수, 연령대_60_이상_생활인구_수, 시간대_1_생활인구_수, 시간대_2_생활인구_수, 시간대_3_생활인구_수, 시간대_4_생활인구_수, 시간대_5_생활인구_수, 시간대_6_생활인구_수, 월요일_생활인구_수, 화요일_생활인구_수, 수요일_생활인구_수, 목요일_생활인구_수, 금요일_생활인구_수, 토요일_생활인구_수, 일요일_생활인구_수 from df_lifepop",
+    "select * from df_sales",
+    "select 지출_총금액, 행정동_코드 from df_total_sales",
+    "select * from df_income_consume",
+    "select 기준_년_코드, 기준_분기_코드, 행정동_코드, 총_직장인구_수, 상권_코드, 상권_코드_명 from df_workpop"
+]
+
+# 멀티프로세싱 풀 생성 (2개의 CPU 코어를 사용)
+num_processes = 2  # CPU 코어 수를 2개로 제한
+with Pool(num_processes) as pool:
+    results = pool.map(get_data, query_list)
+
+# 결과를 하나의 DataFrame으로 병합
+df_store = results[0]
+df_facility = results[1]
+df_apart = results[2]
+df_map_info = results[3]
+df_rs_population = results[4]
+df_rs_income = results[5]
+df_lifepop = results[6]
+df_sales = results[7]
+df_total_sales = results[8]
+df_income_consume = results[9]
+df_workpop = results[10]
+
 
 # 환경분석
 # 분석0: 행정동별 상권 개수
