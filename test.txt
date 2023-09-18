@@ -3,4 +3,5 @@ sudo docker build -t flask:test .
 cd ..
 cd nginx
 sudo docker build -t nginx:test .
+set FLASK_DEBUG=0
 sudo docker compose build & sudo docker compose up

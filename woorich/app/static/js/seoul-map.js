@@ -120,14 +120,14 @@ fetch(staticUrl+'/data/gu-geo.json')
                 
                 // 샘플 데이터 
                 const recommended_item = [' ', ' ', ' ', ' ', ' '];
-
+                var url = window.location.protocol + "//" + window.location.host
                 const popup = new mapboxgl.Popup({ closeButton: true, offset: 25 }) // Customize popup behavior
                 .setLngLat([longitude, latitude])
                 .setHTML(`
                     <div class="container rounded" id="${dong_name}">
                         <div id="popup-button-list-${index}" class="d-flex flex-column align-baseline" style="display: block;">
                             <span class='my-2' style="font-family: 'Noto Sans KR', sans-serif;">${gu}, ${dong_name}</span>
-                            <a href='/dashboard/report/summary/${dong_code}/${gu}/${dong_name}/2022/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
+                            <a href='${url}/dashboard/report/summary/${dong_code}/${gu}/${dong_name}/2022/4/0' class="btn btn-outline-secondary m-1" id="button-${index}">상권 분석</a>
                             <a href='#' class="btn btn-outline-secondary m-1" id="button-recommend-${index}">업종추천</a>
                         </div>
 
