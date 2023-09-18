@@ -23,7 +23,7 @@ conn = pymysql.connect(
 
 # Redis 연결 설정
 try:
-    r = redis.Redis(host='localhost', port=6379, db=0, socket_timeout=100)
+    r = redis.Redis(host='redis', port=6379, db=0, socket_timeout=100)
     if r.ping() is False:
         raise ConnectionError("Redis 서버에 연결할 수 없습니다.")
 except redis.ConnectionError as e:
