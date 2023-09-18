@@ -213,7 +213,8 @@ fetch(staticUrl+'/data/gu-geo.json')
                                 title.textContent="외식업";
                                 document.getElementById('spinner').style.display = 'block';
                                 document.getElementById('prediction_result_list').style.display = 'none';
-                                fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=1`)
+                                var url = new URL(window.location.href);
+                                fetch(`${url.origin}/dashboard/prediction?arg1=${dong_code}&arg2=1`)
                                     .then(response => response.json())
                                     .then(data => {
                                         prediction_list.innerHTML = ""
@@ -241,7 +242,8 @@ fetch(staticUrl+'/data/gu-geo.json')
                                 title.textContent="서비스업";
                                 document.getElementById('spinner').style.display = 'block';
                                 document.getElementById('prediction_result_list').style.display = 'none';
-                                fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=2`)
+                                var url = new URL(window.location.href);
+                                fetch(`${url.origin}/dashboard/prediction?arg1=${dong_code}&arg2=2`)
                                     .then(response => response.json())
                                     .then(data => {
                                         prediction_list.innerHTML = ""
@@ -269,7 +271,8 @@ fetch(staticUrl+'/data/gu-geo.json')
                                 title.textContent="소매업";
                                 document.getElementById('spinner').style.display = 'block';
                                 document.getElementById('prediction_result_list').style.display = 'none';
-                                fetch(`http://127.0.0.1:5000/dashboard/prediction?arg1=${dong_code}&arg2=3`)
+                                var url = new URL(window.location.href);
+                                fetch(`${url.origin}/dashboard/prediction?arg1=${dong_code}&arg2=3`)
                                     .then(response => response.json())
                                     .then(data => {
                                         prediction_list.innerHTML = ""

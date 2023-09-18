@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
       const selectedQuarter = quarterSelect.value;
   
       if (selectedYear !== '년도' && selectedQuarter !== '분기') {
-        window.location.href = `http://127.0.0.1:5000/dashboard/report/${reportType}/${dongCode}/${currentGu}/${currentDong}/${selectedYear}/${selectedQuarter}/${jobCode}`;
+        var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.location.href = `${url}/${reportType}/${dongCode}/${currentGu}/${currentDong}/${selectedYear}/${selectedQuarter}/${jobCode}`;
       } else {
         alert('Please select a valid year and quarter.');
       }
