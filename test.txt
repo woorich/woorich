@@ -1,3 +1,6 @@
-docker build -t flask:test .
-docker build -t nginx:test .
-docker compose build & docker compose up
+cd woorich
+sudo docker build -t flask:test .
+cd ..
+cd nginx
+sudo docker build -t nginx:test .
+sudo docker compose build & sudo docker compose up

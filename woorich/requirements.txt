@@ -52,4 +52,3 @@ tzdata==2023.3
 watchdog==3.0.0
 Werkzeug==2.3.7
 WTForms==3.0.1
-flask-cors

@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %} {% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="left-section col-3 p-4 mb-3 text-secondary shadow">
+      <div class="mb-5">
+        <h3>지역 선택</h3>
+        <div class="input-group w-100 my-3">
+          <select
+            class="form-select"
+            id="dynamic-select-gu"
+            aria-label="Default select example"
+          >
+            <option selected>행정구</option>
+          </select>
+          <select
+            class="form-select"
+            id="dynamic-select-dong"
+            aria-label="Default select example"
+          >
+            <option selected>행정동</option>
+          </select>
+        </div>
+      </div>
+      <div
+        id="result"
+        class="text-center mt-3"
+        style="background-color: rgb(183, 196, 255); color: white"
+      ></div>
+    </div>
+    <div
+      id="map-container"
+      style="height: 75vh;"
+      class="right-section col-9 bg-light text-center"
+    ></div>
+  </div>
+</div>
+<script>
+  // Define a global variable for the static URL
+  const staticUrl = "{{ url_for('static', filename='') }}";
+</script>
+<script
+  defer
+  src="{{ url_for('static', filename='/js/seoul-map.js', prediction=prediction) }}"
+  staticUrl="{{ url_for('static', filename='') }}"
+></script>
+{% endblock %}
