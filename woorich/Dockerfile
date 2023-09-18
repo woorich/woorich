@@ -17,7 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # Define environment variables for RDS connection
-ENV FLASK_APP woorichApp
 
 # Run the Flask application
 CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
