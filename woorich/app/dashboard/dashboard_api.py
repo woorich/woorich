@@ -5,6 +5,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import json
+
 from app.dashboard.cache_utils import get_data
 
 df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류_코드, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")

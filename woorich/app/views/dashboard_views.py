@@ -30,7 +30,7 @@ def report(dong_code, dong, gu, year, quarter, job_code):
 
 @bp.route('/report/environment/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report_environment(dong_code, dong, gu, year, quarter, job_code):
-    from woorichApp.dashboard.dashboard_api import (
+    from app.dashboard.dashboard_api import (
         zone_num,
         by_loc,
         store_num,
@@ -72,7 +72,7 @@ def report_environment(dong_code, dong, gu, year, quarter, job_code):
 
 @bp.route('/report/population/<int:dong_code>/<gu>/<dong>/<int:year>/<int:quarter>/<int:job_code>')
 def report_population(dong_code, dong, gu, year, quarter, job_code):
-    from woorichApp.dashboard.dashboard_api import (
+    from app.dashboard.dashboard_api import (
         total_rspop,
         total_rspop_line,
         max_rspop,
@@ -138,7 +138,7 @@ def report_population(dong_code, dong, gu, year, quarter, job_code):
 
 @bp.route('/report/sales/<int:dong_code>/<dong>/<gu>/<int:year>/<int:quarter>/<int:job_code>')
 def report_sales(dong_code, dong, gu, year, quarter, job_code):
-    from woorichApp.dashboard.dashboard_api import (
+    from app.dashboard.dashboard_api import (
         print_total_sales,
         compare_sales_by_day,
         show_sales_rate,
