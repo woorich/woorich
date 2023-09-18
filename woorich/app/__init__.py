@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
+from flask_cors import CORS
 
 import config
 
@@ -25,6 +26,7 @@ login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object(config.app_config)
 
     # ORM

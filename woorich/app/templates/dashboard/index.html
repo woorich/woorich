@@ -21,48 +21,6 @@
           </select>
         </div>
       </div>
-      <div class="diva my-3 w-100">
-        <h3>업종 대분류 선택</h3>
-        <div class="my-3 d-flex justify-content-between">
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            style="font-size: 0.8rem"
-          >
-            전체
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            style="font-size: 0.8rem"
-          >
-            외식업
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            style="font-size: 0.8rem"
-          >
-            서비스업
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            style="font-size: 0.8rem"
-          >
-            소매업
-          </button>
-        </div>
-      </div>
-      <div class="w-100 text-center mt-5">
-        <button
-          type="button"
-          class="btn btn-outline-info"
-          onclick="show_report()"
-        >
-          제출
-        </button>
-      </div>
       <div
         id="result"
         class="text-center mt-3"
@@ -82,7 +40,7 @@
 </script>
 <script
   defer
-  src="{{ url_for('static', filename='/js/seoul-map.js') }}"
+  src="{{ url_for('static', filename='/js/seoul-map.js', prediction=prediction) }}"
   staticUrl="{{ url_for('static', filename='') }}"
 ></script>
 {% endblock %}

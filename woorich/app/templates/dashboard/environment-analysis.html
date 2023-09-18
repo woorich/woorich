@@ -48,10 +48,15 @@
           <h4> 업종별 업소 수 3년 추이</h4>
           <div class="chart" id="bargraph3">
             <script>
-              var graphs3 = {{plot3 | safe}};
-              Plotly.plot('bargraph3',graphs3,{});
+                var plot3 = {{ plot3 | tojson | safe }};
+                
+                if (plot3.data.length > 0) {
+                    Plotly.newPlot('bargraph3', plot3.data, plot3.layout);
+                } else {
+                    document.getElementById('bargraph3').innerHTML = "Sorry";
+                }
             </script>
-          </div>
+          </div>        
         </div>
       </div>
 

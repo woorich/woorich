@@ -4,12 +4,13 @@
     <div class="row">
         <div class="col d-flex align-items-center" style="font-family: 'Noto Sans KR', sans-serif;">
             <div>
+                <img class="mb-3" width="100px" src="{{ url_for('static', filename='/img/우리은행.png') }}">
                 <h5 style="font-weight: 500;">소상공인의 준비된 창업과 안정적 성장을 <br>지원하기 위한 1:1 맞춤형 컨설팅</h5>
-                <h1 style="font-size:5rem">Woorich</h1>
-                <div class="input-group my-4" style="font-size: .5rem;">
-                    <input type="text" class="form-control" placeholder="질문 검색" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <h1 class="mb-5" style="font-size:5rem">Woorich</h1>
+                <div class="input-group" style="font-size: .5rem;">
+                    <input type="text" class="form-control" id="search_kw" placeholder="질문 검색" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
-                      <button class="input-group-text" id="basic-addon2">확인</button>
+                      <button class="input-group-text" id="btn_search">확인</button>
                     </div>
                   </div>
                   
@@ -19,10 +20,17 @@
             <img width="80%" src="{{ url_for('static', filename='/img/2650149.jpg') }}">
         </div>
     </div>
-    <div class="row">
-        <div class="col-3 text-center">
-            <img width="100%" src="{{ url_for('static', filename='/img/우리은행.png') }}">
-        </div>
-    </div>
 </div>
+<form id="searchForm" method="get" action="{{ url_for('board._list') }}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw or '' }}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+  </form>
+<script defer>
+  const btn_search = document.getElementById("btn_search");
+  btn_search.addEventListener('click', function() {
+      document.getElementById('kw').value = document.getElementById('search_kw').value;
+      document.getElementById('page').value = 1;  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+      document.getElementById('searchForm').submit();
+  });
+</script>
 {% endblock %}

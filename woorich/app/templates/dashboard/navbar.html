@@ -24,11 +24,7 @@
           </select>
         </div>
       </div>
-      <a
-      class="btn btn-outline-danger my-3 shadow"
-      role="button"
-      href="{{ url_for('dashboard.index') }}"
-      ><i class="bi bi-bookmark-heart"></i> 스크랩 </a>
+      
     </div>
   </div>
   
@@ -37,9 +33,6 @@
 </div>
 <div class="my-5">
     <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link {{ 'active' if active_tab == 'report' else '' }}" href="{{ url_for('dashboard.report', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter, job_code=0) }}" tabindex="-1" aria-current="true">분석 요약</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link {{ 'active' if active_tab == 'report_environment' else '' }}" href="{{ url_for('dashboard.report_environment', dong_code=dong_code, dong=dong, gu=gu, year=year, quarter=quarter, job_code=0) }}">환경 분석</a>
         </li>

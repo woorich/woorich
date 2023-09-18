@@ -1,4 +1,4 @@
-from app import db
+from woorichApp import db
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -10,6 +10,7 @@ class User(db.Model):
     phone = db.Column(db.String(45), unique=True, nullable=False)
     address = db.Column(db.String(100), unique=True, nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
     
     def delete(self):
         db.session.delete(self)
@@ -32,6 +33,8 @@ class Reply(db.Model):
     admin_no = db.Column(db.Integer, db.ForeignKey('admin.no', ondelete='CASCADE'))
     board_no = db.Column(db.Integer, db.ForeignKey('board.no', ondelete='CASCADE'))
     board = db.relationship(Board, backref=db.backref('reply'))
+    user_no = db.Column(db.Integer, db.ForeignKey('user.no', ondelete='CASCADE'))
+    user = db.relationship('User', backref=db.backref('reply'))
 
 class Admin(db.Model):
     __tablename__ = 'admin'

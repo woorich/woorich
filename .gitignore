@@ -5,3 +5,4 @@
 
 # Distribution / packaging
 */myvenv/
+.env

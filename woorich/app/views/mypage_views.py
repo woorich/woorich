@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session, flash, url_for, jsonify, g
-from app.views.auth_views import login_required
-from app import db
+from woorichApp.views.auth_views import login_required
+from woorichApp import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..models import User
 from ..forms import UserUpdateForm
@@ -37,3 +37,8 @@ def update_user_info(user_id):
 def scrap_list(user_id):
     user = g.user
     return render_template('mypage/scrap_list.html', user=user)
+
+@bp.route('/manager_page/<user_id>', methods=['GET','POST'])
+def manager_page(user_id):
+    user = g.user
+    return render_template('mypage/manager.html', user=user)
