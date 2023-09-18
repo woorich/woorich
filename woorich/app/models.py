@@ -1,4 +1,4 @@
-from woorichApp import db
+from app import db
 
 class User(db.Model):
     __tablename__ = 'user'

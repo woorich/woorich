@@ -3,9 +3,9 @@ from sqlalchemy.sql.functions import current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
-from woorichApp import db
-from woorichApp.forms import UserCreateForm, UserLoginForm, UserDeleteForm
-from woorichApp.models import User
+from app import db
+from app.forms import UserCreateForm, UserLoginForm, UserDeleteForm
+from app.models import User
 import functools
 import datetime
 

@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session, flash, url_for, jsonify, g
-from woorichApp.views.auth_views import login_required
-from woorichApp import db
+from app.views.auth_views import login_required
+from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..models import User
 from ..forms import UserUpdateForm

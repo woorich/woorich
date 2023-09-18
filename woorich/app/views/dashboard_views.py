@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from woorichApp.dashboard.prediction_api import prediction
+from app.dashboard.prediction_api import prediction
 
 bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 

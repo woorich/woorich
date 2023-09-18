@@ -2,9 +2,9 @@ from datetime import datetime
 from flask import Blueprint, url_for, request, render_template, g, flash
 from werkzeug.utils import redirect
 from .auth_views import login_required
-from woorichApp import db
+from app import db
 from ..forms import ReplyForm
-from woorichApp.models import Board, Reply
+from app.models import Board, Reply
 
 bp = Blueprint('reply', __name__, url_prefix='/reply')
 

@@ -1,4 +1,4 @@
-from woorichApp.dashboard.cache_utils import get_data
+from app.dashboard.cache_utils import get_data
 import pandas as pd
 from prophet import Prophet
 import numpy as np

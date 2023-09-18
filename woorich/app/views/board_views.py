@@ -2,9 +2,9 @@ from datetime import datetime
 from flask import Blueprint, render_template, request, url_for, g, flash
 from werkzeug.utils import redirect
 from .. import db 
-from woorichApp.views.auth_views import login_required
-from woorichApp.models import Board, User
-from woorichApp.forms import BoardForm, ReplyForm
+from app.views.auth_views import login_required
+from app.models import Board, User
+from app.forms import BoardForm, ReplyForm
 
 bp = Blueprint('board', __name__, url_prefix='/board')
 @bp.route('/list/')

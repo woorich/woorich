@@ -5,7 +5,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import json
-from woorichApp.dashboard.cache_utils import get_data
+from app.dashboard.cache_utils import get_data
 
 df_store = get_data("select 행정동_코드, 상권_코드, 상권_코드_명, 행정동명, 점포_수, 서비스_업종_코드_명, 업종_대분류_코드, 업종_대분류, 기준_년_코드, 기준_분기_코드 from df_store")
 df_facility = get_data("select 기준_년_코드, 기준_분기_코드, 행정동_코드, 행정동명, 관공서_수, 은행_수, 종합병원_수, 일반_병원_수, 약국_수, 유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 대학교_수, 백화점_수, 슈퍼마켓_수, 극장_수, 숙박_시설_수, 공항_수, 철도_역_수, 버스_터미널_수, 지하철_역_수, 버스_정거장_수 from df_facility")
