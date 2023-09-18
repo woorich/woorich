@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  redis:
+    container_name: redis
+    image: redis:4.0.8-alpine # 역시 alpine 이미지를 사용해줍니다.
+    ports:
+      - "6379:6379"
+    restart: always
+    networks: # 서버와 같은 네트워크, 잊지 마세요!
+      - backend
+
+  flask:
+      container_name: woorich
+      image: "flask:test"
+      env_file: .env
+      ports:
+       - "5000:5000"
+      depends_on:
+        - redis
+      networks:
+        - backend
+        
+  nginx:
+      container_name: nginx
+      image: "nginx:test"
+      ports:
+       - "80:80"
+      depends_on:
+        - redis
+      networks:
+        - backend
+
+networks:
+  backend:
+    driver: bridge

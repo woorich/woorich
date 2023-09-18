@@ -1,0 +1,63 @@
+<!-- 네비게이션바 -->
+<nav
+  class="navbar navbar-expand-lg navbar-light rounded-bottom shadow-sm px-5 py-3"
+>
+  <style>
+    .navbar-brand {
+      font-size: 2rem; /* Woorich 글자 크기 조정. */
+    }
+
+    .navbar-nav-right {
+      margin-left: auto; /* 마이페이지와 로그아웃을 오른쪽으로 정렬. */
+    }
+  </style>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">Woorich</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li>
+          <a class="nav-link nav-btn" href="{{ url_for('dashboard.index') }}">대시보드</a>
+        </li>
+        <li>
+          <a class="nav-link nav-btn" href="{{ url_for('board._list') }}">게시판</a>
+        </li>
+      </ul>
+      {% if g.user %}
+      <!-- .navbar-nav-right 클래스 추가 -->
+      <ul class="navbar-nav navbar-nav-right mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('mypage.mypage') }}"
+            ><i class="bi bi-person-lines-fill mx-2"></i>마이페이지</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.logout') }}"
+            ><i class="bi bi-file-earmark-person-fill mx-1"></i>{{
+            g.user.username }} (로그아웃)</a
+          >
+        </li>
+      </ul>
+      {% else %}
+      <ul class="navbar-nav navbar-nav-right mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.signup') }}">계정생성</a>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>

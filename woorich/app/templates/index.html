@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="container my-3 ">
+    <div class="row">
+        <div class="col d-flex align-items-center" style="font-family: 'Noto Sans KR', sans-serif;">
+            <div>
+                <h5 style="font-weight: 500;">소상공인의 준비된 창업과 안정적 성장을 <br>지원하기 위한 1:1 맞춤형 컨설팅</h5>
+                <h1 style="font-size:5rem">Woorich</h1>
+                <div class="input-group my-4" style="font-size: .5rem;">
+                    <input type="text" class="form-control" placeholder="질문 검색" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="input-group-text" id="basic-addon2">확인</button>
+                    </div>
+                  </div>
+                  
+            </div>
+        </div>
+        <div class="col">
+            <img width="80%" src="{{ url_for('static', filename='/img/2650149.jpg') }}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-center">
+            <img width="100%" src="{{ url_for('static', filename='/img/우리은행.png') }}">
+        </div>
+    </div>
+</div>
+{% endblock %}

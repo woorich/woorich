@@ -1,0 +1,5 @@
+# 무시할 파일 및 디렉토리 목록
+.env
+*.pyc
+__pycache__
+myvenv
